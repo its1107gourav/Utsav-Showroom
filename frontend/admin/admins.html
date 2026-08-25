@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Manage Owners — Utsav Showroom Admin</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+<div class="mu-shell">
+  <aside class="mu-sidebar">
+    <h1>Utsav Showroom<br>Admin</h1>
+    <nav>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="posts.html">Posts / Products</a>
+      <a href="inventory.html">Inventory</a>
+      <a href="categories.html">Categories</a>
+      <a href="admins.html" class="active">Manage Owners</a>
+    </nav>
+    <div class="mu-logout"><button class="btn" id="logoutBtn" style="width:100%">Log out</button></div>
+  </aside>
+  <main class="mu-main">
+    <div class="mu-topbar"><h2>Manage Owners</h2></div>
+
+    <div class="mu-card">
+      <p class="hint" style="margin-top:0;">
+        Only one owner can be logged in at a time — logging in anywhere
+        (any account) automatically signs out whatever session was active
+        before it. You cannot delete the last remaining owner account.
+      </p>
+      <p class="hint">
+        The public site's sidebar "Owner Login" → First-Time Setup uses a
+        dual-OTP flow (one code by SMS, one by email); once verified, the
+        new owner sets their own password and their phone number is
+        <b>locked</b> to that account — a different number will be
+        rejected. Reset a locked number below if it needs to change.
+        Returning owners log in with email + phone + password (no OTP).
+      </p>
+    </div>
+
+    <div class="mu-card" id="slotsCard">
+      <h3>Owner Slots</h3>
+      <p class="hint" style="margin-top:0;" id="slotsHint">Loading…</p>
+      <div id="slotsRootOnly" style="display:none;">
+        <div class="mu-form-grid">
+          <div class="mu-form-row"><label>Number of owner slots</label><input type="number" min="1" id="slots_new"></div>
+          <div class="mu-form-row"><label>Your password (to confirm)</label><input type="password" id="slots_password"></div>
+        </div>
+        <button class="btn btn-primary" id="updateSlotsBtn" type="button">Update Owner Slot Limit</button>
+      </div>
+      <p class="hint" id="slotsNonRootNote" style="display:none;">Only the first (root) owner can change this.</p>
+    </div>
+
+    <div class="mu-card">
+      <h3>Add owner directly (emergency fallback)</h3>
+      <p class="hint" style="margin-top:0;">Prefer First-Time Setup on the public site (OTP-verified) — this creates an account without verifying the phone number, and still counts against the owner slot limit above.</p>
+      <div class="mu-form-grid">
+        <div class="mu-form-row"><label>Email</label><input type="text" id="na_email" placeholder="newowner@example.com"></div>
+        <div class="mu-form-row"><label>Password (8+ characters)</label><input type="text" id="na_password" placeholder="Choose a password"></div>
+        <div class="mu-form-row"><label>Name (optional)</label><input type="text" id="na_name"></div>
+      </div>
+      <button class="btn btn-primary" id="addAdminBtn" type="button">Add Owner</button>
+    </div>
+
+    <div class="mu-card" style="padding:0;">
+      <table class="mu-table">
+        <thead><tr><th>Email</th><th>Name</th><th>Contact Number</th><th>Setup</th><th>Created</th><th>Last login</th><th></th></tr></thead>
+        <tbody id="adminsBody"><tr><td colspan="7" class="mu-empty">Loading…</td></tr></tbody>
+      </table>
+    </div>
+  </main>
+</div>
+<script src="js/admin-api.js"></script>
+<script>
+let currentAdminId = null;
+let isRootAdmin = false;
+
+async function loadSlots() {
+  const { maxOwnerSlots, currentOwnerCount } = await api('/api/auth/owner-settings');
+  document.getElementById('slotsHint').textContent =
+    `${currentOwnerCount} of ${maxOwnerSlots} owner slot(s) in use.`;
+  document.getElementById('slots_new').value = maxOwnerSlots;
+  document.getElementById('slotsRootOnly').style.display = isRootAdmin ? '' : 'none';
+  document.getElementById('slotsNonRootNote').style.display = isRootAdmin ? 'none' : '';
+}
+
+document.getElementById('updateSlotsBtn').addEventListener('click', async () => {
+  const newMaxSlots = Number(document.getElementById('slots_new').value);
+  const password = document.getElementById('slots_password').value;
+  if (!password) { toast('Your password is required to confirm this change.', true); return; }
+  try {
+    await api('/api/auth/owner-settings', { method: 'PATCH', body: { newMaxSlots, password } });
+    document.getElementById('slots_password').value = '';
+    toast('Owner slot limit updated.');
+    await loadSlots();
+  } catch (err) { toast(err.message, true); }
+});
+
+async function loadAdmins() {
+  const { admins, currentAdminId: cid } = await api('/api/auth/admins');
+  currentAdminId = cid;
+  const me = admins.find(a => a.id === cid);
+  isRootAdmin = !!(me && me.isRoot);
+  const body = document.getElementById('adminsBody');
+  body.innerHTML = admins.map(a => `
+    <tr>
+      <td>${a.email}${a.id === currentAdminId ? ' <span class="mu-badge published">you</span>' : ''}${a.isRoot ? ' <span class="mu-badge">root</span>' : ''}</td>
+      <td>${a.name || '—'}</td>
+      <td>${a.phone ? `${a.phone} ${a.phoneVerifiedAt ? '<span class="mu-badge published">locked</span>' : '<span class="mu-badge">unverified</span>'}` : '<span class="hint">not set</span>'}
+        <br><button class="btn btn-sm" data-reset-phone="${a.id}" style="margin-top:4px;">${a.phone ? 'Reset number' : 'Set number'}</button>
+      </td>
+      <td>${a.setupComplete ? '<span class="mu-badge published">complete</span>' : '<span class="mu-badge">pending password</span>'}</td>
+      <td>${new Date(a.createdAt).toLocaleDateString()}</td>
+      <td>${a.lastLoginAt ? new Date(a.lastLoginAt).toLocaleString() : 'Never'}</td>
+      <td><button class="btn btn-sm btn-danger" data-del="${a.id}">Delete</button></td>
+    </tr>
+  `).join('');
+  await loadSlots();
+}
+
+document.getElementById('adminsBody').addEventListener('click', async (e) => {
+  const resetBtn = e.target.closest('button[data-reset-phone]');
+  if (resetBtn) {
+    const id = resetBtn.dataset.resetPhone;
+    const phone = prompt('New contact number for this owner (they\'ll need to verify it once via Owner Login before it locks again):');
+    if (!phone) return;
+    try {
+      await api(`/api/auth/admins/${id}/phone`, { method: 'PATCH', body: { phone } });
+      toast('Contact number updated — unlocked until next OTP verification.');
+      await loadAdmins();
+    } catch (err) { toast(err.message, true); }
+    return;
+  }
+  const btn = e.target.closest('button[data-del]');
+  if (!btn) return;
+  const id = btn.dataset.del;
+  const isSelf = id === currentAdminId;
+  const msg = isSelf
+    ? 'This deletes YOUR OWN account. You will be signed out immediately and lose all owner access. Continue?'
+    : 'Delete this owner account? They will lose access immediately.';
+  if (!confirm(msg)) return;
+  try {
+    await api(`/api/auth/admins/${id}`, { method: 'DELETE' });
+    if (isSelf) { window.location.href = 'index.html'; return; }
+    toast('Owner removed.');
+    await loadAdmins();
+  } catch (err) { toast(err.message, true); }
+});
+
+document.getElementById('addAdminBtn').addEventListener('click', async () => {
+  const email = document.getElementById('na_email').value.trim();
+  const password = document.getElementById('na_password').value;
+  const name = document.getElementById('na_name').value.trim();
+  if (!email || !password) { toast('Email and password are required.', true); return; }
+  if (password.length < 8) { toast('Password must be at least 8 characters.', true); return; }
+  try {
+    await api('/api/auth/admins', { method: 'POST', body: { email, password, name: name || undefined } });
+    toast('Owner added. They still need to set their contact number from Owner Login before they can log in — or reset it manually above.');
+    document.getElementById('na_email').value = '';
+    document.getElementById('na_password').value = '';
+    document.getElementById('na_name').value = '';
+    await loadAdmins();
+  } catch (err) { toast(err.message, true); }
+});
+
+(async function () {
+  await requireAdminSession();
+  document.getElementById('logoutBtn').addEventListener('click', async () => {
+    await api('/api/auth/logout', { method: 'POST' });
+    window.location.href = 'index.html';
+  });
+  try { await loadAdmins(); } catch (e) { toast(e.message, true); }
+})();
+</script>
+</body>
+</html>

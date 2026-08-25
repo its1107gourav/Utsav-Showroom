@@ -1,0 +1,475 @@
+<!doctype html>
+<!-- =========================================================================
+     UTSAV SHOWROOM — HOMEPAGE  (index.html)
+     =========================================================================
+     WHAT THIS PAGE IS
+     The site's front door. Introduces the brand, leads with the beauty
+     parlour side of the business, then previews every one of the 14
+     collections.
+
+     ★ UPDATED: every image box on this page (bento tiles, beauty-band
+     cards, spotlight cards) is now a real ".card" — wired into the
+     shared engine in js/app.js. That means EVERY box here has:
+       - a computed name, star rating, and price (see app.js →
+         deriveItem — same image always gets the same info everywhere)
+       - a ♡ like button (saved to localStorage)
+       - a ⤴ share button (copies a shareable link)
+       - clicking the photo opens the full-screen #detailModal below
+       - a separate "View Collection →" link (inside bento tiles and
+         beauty cards only) still navigates to that category's full
+         page under /pages/ — clicking the photo itself gives a quick
+         preview instead of leaving the page.
+
+     FILES THIS PAGE DEPENDS ON
+       css/base.css      → design tokens, nav, footer, buttons, the
+                            .card component (photo/name/price/rating/
+                            like/share) and the #detailModal.
+       css/sections.css   → chips band, beauty band, bento grid,
+                            spotlight rows, service ledger, CTA band.
+       css/home.css        → homepage-only hero collage.
+       js/app.js            → theme toggle, scroll reveal, hero
+                            counter, AND the card engine (hydrate/
+                            like/share/modal) described above.
+
+     PAGE STRUCTURE (in order)
+       1. <nav>          sticky header, Day/Night toggle
+       2. .hero           headline + 4-photo collage + "855 looks" stat
+       3. .chips-band      quick-jump pill links to all 14 categories
+       4. .beauty-band      5 studio services, now as real cards
+       5. #collections       the 14-tile bento grid, now as real cards
+       6. #spotlights          3 deep-dive rows, now as real cards
+       7. #studio                the 4-discipline service ledger
+       8. #contact                 closing CTA band
+       9. <footer>                    site-wide footer
+      10. #detailModal                 ★ new — the full-screen detail view
+     ========================================================================= -->
+<html lang="en" data-theme="day">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Utsav Showroom — Bridal Rental &amp; Beauty Atelier</title>
+<meta name="description" content="Utsav Showroom — a curated world of wedding style, beauty and celebration. Bridal and groom wardrobe rental, jewellery, and a full beauty parlour." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/sections.css">
+<link rel="stylesheet" href="css/home.css">
+<link rel="stylesheet" href="css/enhance.css">
+</head>
+<body>
+
+<!-- =========================== 1. NAV =========================== -->
+<nav class="nav">
+  <div class="wrap nav-row">
+    <a href="#" class="wordmark">Utsav <em>Showroom</em></a>
+    <div class="nav-links">
+      <a href="collections.html">Collections</a>
+      <a href="spotlight.html">Spotlight</a>
+      <a href="studio.html">Parlour</a>
+      <a href="classes.html">Classes</a>
+      <a href="pages/garba-dresses.html">Garba Dresses</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="nav-right">
+      <div class="toggle" id="themeToggle">
+        <span id="toggleLabel">Day</span>
+        <span class="toggle-track"><span class="toggle-thumb"></span></span>
+      </div>
+      <a href="contact.html" class="nav-cta">Book a Slot</a>
+    </div>
+  </div>
+</nav>
+
+<!-- =========================== 2. HERO =========================== -->
+<section class="hero">
+  <div class="wrap hero-inner">
+    <div class="hero-copy reveal">
+      <p class="eyebrow">Utsav Showroom — Beauty Parlour &amp; Bridal Atelier</p>
+      <h1 style="margin-top:16px;">Known for the <i>glow</i>, trusted for the wardrobe.</h1>
+      <p class="hero-sub">A curated world of wedding style, beauty and celebration — hair, makeup, nails, skin, plus bridal and groom wardrobe rental for the day itself.</p>
+      <div class="hero-cta-row">
+        <a href="studio.html" class="btn btn-solid">Explore the Parlour →</a>
+        <a href="contact.html" class="btn btn-line">Book a Consultation</a>
+      </div>
+      <div class="hero-stat">
+        <span class="lbl" style="font-size:13px; text-transform:none; letter-spacing:0; font-family:'Bodoni Moda',serif; font-style:italic; color:var(--text);">A curated world of wedding style, beauty and celebration.</span>
+      </div>
+    </div>
+    <!-- vertical film-reel hero scroller — 3 cards visible at a time,
+         auto-scrolls, clip-masked top+bottom so it never overflows.
+         Each card opens its category page on click. -->
+    <div class="reel-wrap reveal">
+      <div class="reel-track">
+        <a class="reel-card" href="pages/bridal-wear.html"><span class="reel-title">Bride</span><span class="reel-photo"><img src="assets/BRIDAL_WEAR/bb3.jpg" alt="Bride"></span></a>
+        <a class="reel-card" href="pages/groom-wear.html"><span class="reel-title">Groom</span><span class="reel-photo"><img src="assets/GROOM_WEAR/g1.jpg" alt="Groom"></span></a>
+        <a class="reel-card" href="pages/bridal-jewellery.html"><span class="reel-title">Bride Jewellery</span><span class="reel-photo"><img src="assets/BRIDAL_JEWELLERY/j10.jpg" alt="Bride Jewellery"></span></a>
+        <a class="reel-card" href="pages/groom-jewellery.html"><span class="reel-title">Groom Jewellery</span><span class="reel-photo"><img src="assets/GROOM_JEWELLERY/JG1.jpg" alt="Groom Jewellery"></span></a>
+        <a class="reel-card" href="pages/makeup-looks.html"><span class="reel-title">Makeup</span><span class="reel-photo"><img src="assets/MAKEUP_LOOKS/ML5.jpg" alt="Makeup"></span></a>
+        <a class="reel-card" href="pages/hair-styling.html"><span class="reel-title">Hair Styling</span><span class="reel-photo"><img src="assets/HAIR_STYLING/HS10.jpg" alt="Hair Styling"></span></a>
+        <!-- duplicated set so the CSS scroll-loop (translateY -50%) is seamless -->
+        <a class="reel-card" href="pages/bridal-wear.html"><span class="reel-title">Bride</span><span class="reel-photo"><img src="assets/BRIDAL_WEAR/bb3.jpg" alt="Bride"></span></a>
+        <a class="reel-card" href="pages/groom-wear.html"><span class="reel-title">Groom</span><span class="reel-photo"><img src="assets/GROOM_WEAR/g1.jpg" alt="Groom"></span></a>
+        <a class="reel-card" href="pages/bridal-jewellery.html"><span class="reel-title">Bride Jewellery</span><span class="reel-photo"><img src="assets/BRIDAL_JEWELLERY/j10.jpg" alt="Bride Jewellery"></span></a>
+        <a class="reel-card" href="pages/groom-jewellery.html"><span class="reel-title">Groom Jewellery</span><span class="reel-photo"><img src="assets/GROOM_JEWELLERY/JG1.jpg" alt="Groom Jewellery"></span></a>
+        <a class="reel-card" href="pages/makeup-looks.html"><span class="reel-title">Makeup</span><span class="reel-photo"><img src="assets/MAKEUP_LOOKS/ML5.jpg" alt="Makeup"></span></a>
+        <a class="reel-card" href="pages/hair-styling.html"><span class="reel-title">Hair Styling</span><span class="reel-photo"><img src="assets/HAIR_STYLING/HS10.jpg" alt="Hair Styling"></span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =================== 3. MOOD CHIPS (quick links) =================== -->
+<div class="chips-band">
+  <div class="wrap chips">
+    <a class="chip" href="pages/hair-styling.html">Hair Styling · 70</a>
+    <a class="chip" href="pages/makeup-looks.html">Makeup Looks · 22</a>
+    <a class="chip" href="pages/nail-art.html">Nail Art · 29</a>
+    <a class="chip" href="pages/nail-care.html">Nail Care · 13</a>
+    <a class="chip" href="pages/face-care.html">Face Care · 7</a>
+    <a class="chip" href="pages/bridal-wear.html">Bridal Wear · 135</a>
+    <a class="chip" href="pages/groom-wear.html">Groom Wear · 121</a>
+    <a class="chip" href="pages/groom-jewellery.html">Groom Jewellery · 109</a>
+    <a class="chip" href="pages/pagdi-safa.html">Pagdi &amp; Safa · 105</a>
+    <a class="chip" href="pages/bridal-jewellery.html">Bridal Jewellery · 99</a>
+    <a class="chip" href="pages/couple-sets.html">Couple Sets · 64</a>
+    <a class="chip" href="pages/juti-footwear.html">Juti &amp; Footwear · 58</a>
+    <a class="chip" href="pages/features.html">Features · 22</a>
+    <a class="chip" href="pages/studio-details.html">Studio Details · 1</a>
+  </div>
+</div>
+<!-- ===================== 5. COLLECTIONS (bento grid) ===================== -->
+<section class="sec" id="collections">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div>
+        <p class="eyebrow">The Collections</p>
+        <h2 style="margin-top:14px;">Fourteen sections,<br>sized by depth.</h2>
+      </div>
+      <p>Click a tile's photo for a quick preview, or "View Collection" for the full page — real price, rating, like, and share on every item.</p>
+    </div>
+
+    <div class="collection-rows reveal">
+      <div class="tile-row row-1">
+      <div class="tile tile-r1 card" data-image="assets/BRIDAL_WEAR/bb1.jpg" data-category="bridal-wear">
+        <img src="assets/BRIDAL_WEAR/bb1.jpg" alt="Bridal Wear">
+        <div class="tile-overlay"><span class="tile-cat">Rental</span><span class="tile-name">Bridal Wear</span><span class="tile-count">135 looks</span><a class="tile-link" href="pages/bridal-wear.html">View Collection →</a></div>
+      </div>
+      <div class="tile tile-r1 card" data-image="assets/GROOM_WEAR/g1.jpg" data-category="groom-wear">
+        <img src="assets/GROOM_WEAR/g1.jpg" alt="Groom Wear">
+        <div class="tile-overlay"><span class="tile-cat">Rental</span><span class="tile-name">Groom Wear</span><span class="tile-count">121 looks</span><a class="tile-link" href="pages/groom-wear.html">View Collection →</a></div>
+      </div>
+      <div class="tile tile-r1 card" data-image="assets/COUPLE_SETS/cp1.jpg" data-category="couple-sets">
+        <img src="assets/COUPLE_SETS/cp1.jpg" alt="Couple Sets">
+        <div class="tile-overlay"><span class="tile-name">Couple Sets</span><span class="tile-count">64</span><a class="tile-link" href="pages/couple-sets.html">View →</a></div>
+      </div>
+      <div class="tile tile-r1 card" data-image="assets/MAKEUP_LOOKS/ML1.jpg" data-category="makeup-looks">
+        <img src="assets/MAKEUP_LOOKS/ML1.jpg" alt="Makeup Looks">
+        <div class="tile-overlay"><span class="tile-name">Makeup Looks</span><span class="tile-count">22</span><a class="tile-link" href="pages/makeup-looks.html">View →</a></div>
+      </div>
+      </div>
+      <div class="tile-row row-2">
+      <div class="tile tile-r2 card" data-image="assets/BRIDAL_JEWELLERY/j1.jpg" data-category="bridal-jewellery">
+        <img src="assets/BRIDAL_JEWELLERY/j1.jpg" alt="Bridal Jewellery">
+        <div class="tile-overlay"><span class="tile-cat">Rental</span><span class="tile-name">Bridal Jewellery</span><span class="tile-count">99</span><a class="tile-link" href="pages/bridal-jewellery.html">View →</a></div>
+      </div>
+      <div class="tile tile-r2 card" data-image="assets/GROOM_JEWELLERY/JG1.jpg" data-category="groom-jewellery">
+        <img src="assets/GROOM_JEWELLERY/JG1.jpg" alt="Groom Jewellery">
+        <div class="tile-overlay"><span class="tile-cat">Rental</span><span class="tile-name">Groom Jewellery</span><span class="tile-count">109</span><a class="tile-link" href="pages/groom-jewellery.html">View →</a></div>
+      </div>
+      <div class="tile tile-r2 card" data-image="assets/PAGDI_SAFA/pag1.jpg" data-category="pagdi-safa">
+        <img src="assets/PAGDI_SAFA/pag1.jpg" alt="Pagdi &amp; Safa">
+        <div class="tile-overlay"><span class="tile-cat">Rental</span><span class="tile-name">Pagdi &amp; Safa</span><span class="tile-count">105</span><a class="tile-link" href="pages/pagdi-safa.html">View →</a></div>
+      </div>
+      <div class="tile tile-r2 card" data-image="assets/JUTI_FOOTWEAR/J1.jpg" data-category="juti-footwear">
+        <img src="assets/JUTI_FOOTWEAR/J1.jpg" alt="Juti &amp; Footwear">
+        <div class="tile-overlay"><span class="tile-name">Juti &amp; Footwear</span><span class="tile-count">58</span><a class="tile-link" href="pages/juti-footwear.html">View →</a></div>
+      </div>
+      </div>
+      <div class="tile-row row-3">
+      <div class="tile tile-r3 card" data-image="assets/HAIR_STYLING/HS1.jpg" data-category="hair-styling">
+        <img src="assets/HAIR_STYLING/HS1.jpg" alt="Hair Styling">
+        <div class="tile-overlay"><span class="tile-cat">Studio</span><span class="tile-name">Hair Styling</span><span class="tile-count">70</span><a class="tile-link" href="pages/hair-styling.html">View →</a></div>
+      </div>
+      <div class="tile tile-r3 card" data-image="assets/NAIL_ART/NA1.jpg" data-category="nail-art">
+        <img src="assets/NAIL_ART/NA1.jpg" alt="Nail Art">
+        <div class="tile-overlay"><span class="tile-name">Nail Art</span><span class="tile-count">29</span><a class="tile-link" href="pages/nail-art.html">View →</a></div>
+      </div>
+      <div class="tile tile-r3 card" data-image="assets/FEATURES_WALLPAPERS/FW1.jpg" data-category="features">
+        <img src="assets/FEATURES_WALLPAPERS/FW1.jpg" alt="Parlour Services">
+        <div class="tile-overlay"><span class="tile-name">Parlour Services</span><span class="tile-count">22</span><a class="tile-link" href="pages/features.html">View →</a></div>
+      </div>
+      <div class="tile tile-r3 card" data-image="assets/NAIL_CARE/NC1.jpg" data-category="nail-care">
+        <img src="assets/NAIL_CARE/NC1.jpg" alt="Nail Care">
+        <div class="tile-overlay"><span class="tile-name">Nail Care</span><span class="tile-count">13</span><a class="tile-link" href="pages/nail-care.html">View →</a></div>
+      </div>
+      <div class="tile tile-r3 card" data-image="assets/FACE_CARE/fc1.jpg" data-category="face-care">
+        <img src="assets/FACE_CARE/fc1.jpg" alt="Face Care">
+        <div class="tile-overlay"><span class="tile-name">Face Care</span><span class="tile-count">7</span><a class="tile-link" href="pages/face-care.html">View →</a></div>
+      </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 4. BEAUTY BAND ===================== -->
+<section class="beauty-band">
+  <div class="wrap">
+    <div class="beauty-head reveal">
+      <p class="eyebrow" style="justify-content:center;">The Parlour</p>
+      <h2>What Utsav Showroom is known for.</h2>
+      <p>Five studio disciplines, each with its own real portfolio — click a photo for a quick preview, or "View Collection" for the full page.</p>
+    </div>
+    <div class="beauty-row reveal">
+      <div class="beauty-card card" data-image="assets/HAIR_STYLING/HS2.jpg" data-category="hair-styling">
+        <img src="assets/HAIR_STYLING/HS2.jpg" alt="Hair Styling">
+        <div class="ov"><span class="nm">Hair Styling</span><span class="ct">70 looks</span><a class="tile-link" href="pages/hair-styling.html">View Collection →</a></div>
+      </div>
+      <div class="beauty-card card" data-image="assets/MAKEUP_LOOKS/ML3.jpg" data-category="makeup-looks">
+        <img src="assets/MAKEUP_LOOKS/ML3.jpg" alt="Makeup Looks">
+        <div class="ov"><span class="nm">Makeup Looks</span><span class="ct">22 looks</span><a class="tile-link" href="pages/makeup-looks.html">View Collection →</a></div>
+      </div>
+      <div class="beauty-card card" data-image="assets/NAIL_ART/NA3.jpg" data-category="nail-art">
+        <img src="assets/NAIL_ART/NA3.jpg" alt="Nail Art">
+        <div class="ov"><span class="nm">Nail Art</span><span class="ct">29 looks</span><a class="tile-link" href="pages/nail-art.html">View Collection →</a></div>
+      </div>
+      <div class="beauty-card card" data-image="assets/NAIL_CARE/NC2.jpg" data-category="nail-care">
+        <img src="assets/NAIL_CARE/NC2.jpg" alt="Nail Care">
+        <div class="ov"><span class="nm">Nail Care</span><span class="ct">13 looks</span><a class="tile-link" href="pages/nail-care.html">View Collection →</a></div>
+      </div>
+      <div class="beauty-card card" data-image="assets/FACE_CARE/fc3.jpg" data-category="face-care">
+        <img src="assets/FACE_CARE/fc3.jpg" alt="Face Care">
+        <div class="ov"><span class="nm">Face Care</span><span class="ct">7 looks</span><a class="tile-link" href="pages/face-care.html">View Collection →</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 6. SPOTLIGHT ROWS ===================== -->
+<div id="spotlights">
+  <div class="spotlight">
+    <div class="wrap">
+      <div class="spot-bar bar-pink"></div>
+      <div class="spotlight-head"><h3>Bridal Wear, in detail</h3><span class="count">135 looks — <a href="pages/bridal-wear.html">see all →</a></span></div>
+      <div class="spot-row">
+        <div class="spot-card card" data-image="assets/BRIDAL_WEAR/bb2.jpg" data-category="bridal-wear"><img src="assets/BRIDAL_WEAR/bb2.jpg" alt="Bridal wear"></div>
+        <div class="spot-card card" data-image="assets/BRIDAL_WEAR/bb6.jpg" data-category="bridal-wear"><img src="assets/BRIDAL_WEAR/bb6.jpg" alt="Bridal wear"></div>
+        <div class="spot-card card" data-image="assets/BRIDAL_WEAR/bb9.jpg" data-category="bridal-wear"><img src="assets/BRIDAL_WEAR/bb9.jpg" alt="Bridal wear"></div>
+        <div class="spot-card card" data-image="assets/BRIDAL_WEAR/bb12.jpg" data-category="bridal-wear"><img src="assets/BRIDAL_WEAR/bb12.jpg" alt="Bridal wear"></div>
+        <div class="spot-card card" data-image="assets/BRIDAL_WEAR/bb18.jpg" data-category="bridal-wear"><img src="assets/BRIDAL_WEAR/bb18.jpg" alt="Bridal wear"></div>
+        <div class="spot-card card" data-image="assets/BRIDAL_WEAR/bb25.jpg" data-category="bridal-wear"><img src="assets/BRIDAL_WEAR/bb25.jpg" alt="Bridal wear"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="spotlight">
+    <div class="wrap">
+      <div class="spot-bar bar-purple"></div>
+      <div class="spotlight-head"><h3>Bridal Jewellery, in detail</h3><span class="count">99 looks — <a href="pages/bridal-jewellery.html">see all →</a></span></div>
+      <div class="spot-row">
+        <div class="spot-card card" data-image="assets/BRIDAL_JEWELLERY/j2.jpg" data-category="bridal-jewellery"><img src="assets/BRIDAL_JEWELLERY/j2.jpg" alt="Bridal jewellery"></div>
+        <div class="spot-card card" data-image="assets/BRIDAL_JEWELLERY/j5.jpg" data-category="bridal-jewellery"><img src="assets/BRIDAL_JEWELLERY/j5.jpg" alt="Bridal jewellery"></div>
+        <div class="spot-card card" data-image="assets/BRIDAL_JEWELLERY/j8.jpg" data-category="bridal-jewellery"><img src="assets/BRIDAL_JEWELLERY/j8.jpg" alt="Bridal jewellery"></div>
+        <div class="spot-card card" data-image="assets/BRIDAL_JEWELLERY/j12.jpg" data-category="bridal-jewellery"><img src="assets/BRIDAL_JEWELLERY/j12.jpg" alt="Bridal jewellery"></div>
+        <div class="spot-card card" data-image="assets/BRIDAL_JEWELLERY/j18.jpg" data-category="bridal-jewellery"><img src="assets/BRIDAL_JEWELLERY/j18.jpg" alt="Bridal jewellery"></div>
+        <div class="spot-card card" data-image="assets/BRIDAL_JEWELLERY/j25.jpg" data-category="bridal-jewellery"><img src="assets/BRIDAL_JEWELLERY/j25.jpg" alt="Bridal jewellery"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="spotlight">
+    <div class="wrap">
+      <div class="spot-bar bar-gold"></div>
+      <div class="spotlight-head"><h3>Makeup Looks, in detail</h3><span class="count">22 looks — <a href="pages/makeup-looks.html">see all →</a></span></div>
+      <div class="spot-row">
+        <div class="spot-card card" data-image="assets/MAKEUP_LOOKS/ML2.jpg" data-category="makeup-looks"><img src="assets/MAKEUP_LOOKS/ML2.jpg" alt="Makeup look"></div>
+        <div class="spot-card card" data-image="assets/MAKEUP_LOOKS/ML4.jpg" data-category="makeup-looks"><img src="assets/MAKEUP_LOOKS/ML4.jpg" alt="Makeup look"></div>
+        <div class="spot-card card" data-image="assets/MAKEUP_LOOKS/ML6.jpg" data-category="makeup-looks"><img src="assets/MAKEUP_LOOKS/ML6.jpg" alt="Makeup look"></div>
+        <div class="spot-card card" data-image="assets/MAKEUP_LOOKS/ML8.jpg" data-category="makeup-looks"><img src="assets/MAKEUP_LOOKS/ML8.jpg" alt="Makeup look"></div>
+        <div class="spot-card card" data-image="assets/MAKEUP_LOOKS/ML12.jpg" data-category="makeup-looks"><img src="assets/MAKEUP_LOOKS/ML12.jpg" alt="Makeup look"></div>
+        <div class="spot-card card" data-image="assets/MAKEUP_LOOKS/ML16.jpg" data-category="makeup-looks"><img src="assets/MAKEUP_LOOKS/ML16.jpg" alt="Makeup look"></div>
+      </div>
+    </div>
+  </div>
+  <div class="spotlight">
+    <div class="wrap">
+      <div class="spot-bar bar-purple"></div>
+      <div class="spotlight-head"><h3>Groom Wear, in detail</h3><span class="count">121 looks — <a href="pages/groom-wear.html">see all →</a></span></div>
+      <div class="spot-row">
+        <div class="spot-card card" data-image="assets/GROOM_WEAR/g3.jpg" data-category="groom-wear"><img src="assets/GROOM_WEAR/g3.jpg" alt="Groom wear"></div>
+        <div class="spot-card card" data-image="assets/GROOM_WEAR/g5.jpg" data-category="groom-wear"><img src="assets/GROOM_WEAR/g5.jpg" alt="Groom wear"></div>
+        <div class="spot-card card" data-image="assets/GROOM_WEAR/g9.jpg" data-category="groom-wear"><img src="assets/GROOM_WEAR/g9.jpg" alt="Groom wear"></div>
+        <div class="spot-card card" data-image="assets/GROOM_WEAR/g12.jpg" data-category="groom-wear"><img src="assets/GROOM_WEAR/g12.jpg" alt="Groom wear"></div>
+        <div class="spot-card card" data-image="assets/GROOM_WEAR/g18.jpg" data-category="groom-wear"><img src="assets/GROOM_WEAR/g18.jpg" alt="Groom wear"></div>
+        <div class="spot-card card" data-image="assets/GROOM_WEAR/g25.jpg" data-category="groom-wear"><img src="assets/GROOM_WEAR/g25.jpg" alt="Groom wear"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="spotlight">
+    <div class="wrap">
+      <div class="spot-bar bar-gold"></div>
+      <div class="spotlight-head"><h3>Groom Jewellery, in detail</h3><span class="count">109 looks — <a href="pages/groom-jewellery.html">see all →</a></span></div>
+      <div class="spot-row">
+        <div class="spot-card card" data-image="assets/GROOM_JEWELLERY/JG2.jpg" data-category="groom-jewellery"><img src="assets/GROOM_JEWELLERY/JG2.jpg" alt="Groom jewellery"></div>
+        <div class="spot-card card" data-image="assets/GROOM_JEWELLERY/JG5.jpg" data-category="groom-jewellery"><img src="assets/GROOM_JEWELLERY/JG5.jpg" alt="Groom jewellery"></div>
+        <div class="spot-card card" data-image="assets/GROOM_JEWELLERY/JG8.jpg" data-category="groom-jewellery"><img src="assets/GROOM_JEWELLERY/JG8.jpg" alt="Groom jewellery"></div>
+        <div class="spot-card card" data-image="assets/GROOM_JEWELLERY/JG12.jpg" data-category="groom-jewellery"><img src="assets/GROOM_JEWELLERY/JG12.jpg" alt="Groom jewellery"></div>
+        <div class="spot-card card" data-image="assets/GROOM_JEWELLERY/JG18.jpg" data-category="groom-jewellery"><img src="assets/GROOM_JEWELLERY/JG18.jpg" alt="Groom jewellery"></div>
+        <div class="spot-card card" data-image="assets/GROOM_JEWELLERY/JG25.jpg" data-category="groom-jewellery"><img src="assets/GROOM_JEWELLERY/JG25.jpg" alt="Groom jewellery"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Garba Dresses has no catalog images yet (category is deliberately
+       empty until items are added via Admin → Inventory Management), so
+       this spotlight is copy + CTA instead of an image row that would
+       otherwise show broken thumbnails. -->
+  <div class="spotlight">
+    <div class="wrap">
+      <div class="spot-bar bar-pink"></div>
+      <div class="spotlight-head"><h3>Garba Dresses, in detail</h3><span class="count">New collection — <a href="pages/garba-dresses.html">see all →</a></span></div>
+      <div class="cta-band reveal" style="display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap; padding:30px 28px; border-radius:var(--r-lg); background:var(--surface-soft); border:1px solid var(--line);">
+        <p style="color:var(--text-soft); max-width:520px; margin:0;">Festive Navratri &amp; Garba wear — chaniya cholis, kediyus, and dandiya-ready sets are being added to the showroom now.</p>
+        <a href="pages/garba-dresses.html" class="btn btn-line">Visit Garba Dresses →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== 4b. BEAUTY CLASSES TEASER ===================== -->
+<section class="sec" style="border-top:1px solid var(--line);">
+  <div class="wrap">
+    <div class="classes-feature reveal">
+      <div class="classes-feature-photo">
+        <img src="assets/MAKEUP_LOOKS/ML8.jpg" alt="Beauty Classes at Utsav Showroom">
+        <span class="classes-feature-badge">Now Enrolling</span>
+      </div>
+      <div class="classes-feature-copy">
+        <p class="eyebrow">Beauty Classes</p>
+        <h2>Learn the craft, not just book it.</h2>
+        <p>Makeup, hair, and nail artistry courses taught by our in-house team — beginner to professional, with hands-on practice on real bridal looks.</p>
+        <ul class="classes-feature-list">
+          <li>Small batches, hands-on practice</li>
+          <li>Certificate on course completion</li>
+          <li>Taught by our resident artists</li>
+        </ul>
+        <a href="classes.html" class="btn btn-solid">Explore Classes →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 7. SERVICE LEDGER ===================== -->
+<section class="sec" id="studio" style="border-top:1px solid var(--line);">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div>
+        <p class="eyebrow">At The Parlour</p>
+        <h2 style="margin-top:14px;">The service ledger.</h2>
+      </div>
+      <p>Four disciplines, one appointment book — booked separately or built into a full bridal package.</p>
+    </div>
+    <div class="ledger-grid reveal">
+      <div class="ledger-cell">
+        <span class="ledger-num">01 / MAKEUP</span>
+        <h3>Makeup</h3>
+        <p>Bridal, HD, airbrush, and signature party makeup — colour-matched and lit for photography.</p>
+      </div>
+      <div class="ledger-cell">
+        <span class="ledger-num">02 / SKIN</span>
+        <h3>Skin &amp; Body</h3>
+        <p>Facials by skin type, de-tanning, threading, mani-pedi, and body spa — every look's prep work.</p>
+      </div>
+      <div class="ledger-cell">
+        <span class="ledger-num">03 / HAIR</span>
+        <h3>Hair</h3>
+        <p>Keratin, botox, smoothing, rebonding, plus bridal updos styled to hold a full day.</p>
+      </div>
+      <div class="ledger-cell">
+        <span class="ledger-num">04 / NAIL</span>
+        <h3>Nail</h3>
+        <p>Extensions, gel polish, hand-painted art — chrome, French, ombré, 3D.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 8. CTA BAND ===================== -->
+<div class="cta-band">
+  <div class="wrap">
+    <p class="eyebrow" style="justify-content:center; color:rgba(255,255,255,0.75);">Reserve Your Date</p>
+    <h2 style="margin-top:18px;">Ready to be catalogued?</h2>
+    <p>Book a fitting for the wardrobe, or a consultation for the studio — day look or night look, we build it end to end.</p>
+    <a href="contact.html" class="btn btn-ivory">Reserve Your Slot →</a>
+  </div>
+</div>
+
+<!-- =========================== 9. FOOTER =========================== -->
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <h3>UTSAV SHOWROOM</h3>
+        <p>A curated world of wedding style, beauty and celebration.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Parlour</h4>
+        <a href="pages/hair-styling.html">Hair</a>
+        <a href="pages/makeup-looks.html">Makeup</a>
+        <a href="pages/nail-art.html">Nail Art</a>
+        <a href="pages/face-care.html">Skin &amp; Face</a>
+      </div>
+      <div class="foot-col">
+        <h4>Rental</h4>
+        <a href="pages/bridal-wear.html">Bridal Wear</a>
+        <a href="pages/groom-wear.html">Groom Wear</a>
+        <a href="pages/bridal-jewellery.html">Jewellery</a>
+        <a href="pages/pagdi-safa.html">Pagdi &amp; Juti</a>
+      </div>
+      <div class="foot-col">
+        <h4>Contact</h4>
+        <button type="button" class="footer-link-btn" data-book="Wedding Rental">Book a Slot</button>
+        <a href="tel:+919575929021">Call Us</a>
+        <a href="contact.html">Find the Showroom</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Utsav Showroom. All looks archived in-house.</span>
+      <span>Homepage — 14 category pages live under /pages/.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- =========================== 10. FULL-SCREEN DETAIL MODAL =========================== -->
+<!-- Hidden by default (display:none via .modal-overlay in base.css).
+     js/app.js shows it and fills in every field below when any .card
+     on this page is clicked. One copy of this block per page. -->
+<div class="modal-overlay" id="detailModal">
+  <div class="modal-box">
+    <button type="button" class="modal-close" aria-label="Close">✕</button>
+    <div class="modal-photo"><img src="" alt=""></div>
+    <div class="modal-info">
+      <p class="eyebrow modal-eyebrow"></p>
+      <h2 class="modal-name"></h2>
+      <div class="modal-rating"></div>
+      <div class="modal-price"></div>
+      <p class="modal-desc"></p>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-solid modal-cta"></button>
+        <button type="button" class="modal-like" aria-label="Like">♡</button>
+        <button type="button" class="modal-share" aria-label="Share">⤴</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script src="js/sidebar.js"></script>
+<script src="js/booking.js"></script>
+<script src="js/api-config.js"></script>
+<script src="js/api-integration.js"></script>
+</body>
+</html>

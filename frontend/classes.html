@@ -1,0 +1,198 @@
+<!doctype html>
+<!-- =========================================================================
+     UTSAV SHOWROOM — CLASSES PAGE  (classes.html)
+     =========================================================================
+     WHAT THIS PAGE IS
+     New page, added because the client also teaches beauty parlour
+     courses (the "Classes" header button links here). Lists the
+     academy's course offerings as cards: photo, level, description,
+     duration, fee, and an "Enrol Now" button.
+
+     Uses the same shared files as every other page:
+       css/base.css      → nav, footer, buttons, colours
+       css/sections.css  → .page-hero, .class-grid/.class-card, .cta-band
+       js/app.js         → Day/Night toggle, scroll reveal
+     No product modal on this page — courses aren't rental/booking
+     items with a photo-click detail view, so app.js's modal code
+     simply does nothing here (it checks for #detailModal first).
+     ========================================================================= -->
+<html lang="en" data-theme="day">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Classes — Utsav Showroom Academy</title>
+<meta name="description" content="Utsav Showroom Academy — professional beauty parlour courses in makeup, hair, nail art, and skin care." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/sections.css">
+<link rel="stylesheet" href="css/enhance.css">
+</head>
+<body>
+
+<!-- =========================== NAV (identical on every page) =========================== -->
+<nav class="nav">
+  <div class="wrap nav-row">
+    <a href="index.html" class="wordmark">Utsav <em>Showroom</em></a>
+    <div class="nav-links">
+      <a href="collections.html">Collections</a>
+      <a href="spotlight.html">Spotlight</a>
+      <a href="studio.html">Parlour</a>
+      <a href="classes.html">Classes</a>
+      <a href="pages/garba-dresses.html">Garba Dresses</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="nav-right">
+      <div class="toggle" id="themeToggle">
+        <span id="toggleLabel">Day</span>
+        <span class="toggle-track"><span class="toggle-thumb"></span></span>
+      </div>
+      <a href="contact.html" class="nav-cta">Book a Slot</a>
+    </div>
+  </div>
+</nav>
+
+<!-- =========================== PAGE HERO =========================== -->
+<section class="page-hero">
+  <div class="wrap">
+    <p class="crumb"><a href="index.html">Home</a> / Classes</p>
+    <h1>Utsav Showroom <i>Academy.</i></h1>
+    <p>Beyond the parlour chair — six professional courses for anyone who wants to train under the same team that styles our bridal clients. Small batches, hands-on practice, real portfolio work.</p>
+    <div class="tags">
+      <span class="tag">6 Courses</span>
+      <span class="tag">Beginner → Advanced</span>
+      <span class="tag">Certificate on Completion</span>
+    </div>
+  </div>
+</section>
+
+<!-- =========================== COURSE GRID =========================== -->
+<section class="page-body">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div>
+        <p class="eyebrow">Enrol</p>
+        <h2 style="margin-top:14px;">Pick a track.</h2>
+      </div>
+      <p>Every course is taught by our in-house team, using the same techniques you'll see across our showroom's full portfolio.</p>
+    </div>
+
+    <div class="class-grid reveal">
+
+      <div class="class-card">
+        <div class="class-photo"><img src="assets/MAKEUP_LOOKS/ML7.jpg" alt="Professional Makeup Artistry"></div>
+        <div class="class-body">
+          <span class="class-level">Beginner</span>
+          <h3>Professional Makeup Artistry</h3>
+          <p>Foundations of face mapping, colour theory, and everyday-to-party makeup application on real models.</p>
+          <div class="class-meta"><span>6 Weeks</span><span class="class-fee">₹14,999</span></div>
+        </div>
+      </div>
+
+      <div class="class-card">
+        <div class="class-photo"><img src="assets/MAKEUP_LOOKS/ML9.jpg" alt="Advanced Bridal Makeup Mastery"></div>
+        <div class="class-body">
+          <span class="class-level">Advanced</span>
+          <h3>Bridal Makeup Mastery</h3>
+          <p>HD and airbrush bridal techniques, draping-day timelines, and building a bridal portfolio that books clients.</p>
+          <div class="class-meta"><span>8 Weeks</span><span class="class-fee">₹24,999</span></div>
+        </div>
+      </div>
+
+      <div class="class-card">
+        <div class="class-photo"><img src="assets/HAIR_STYLING/HS5.jpg" alt="Hair Styling Certification"></div>
+        <div class="class-body">
+          <span class="class-level">Intermediate</span>
+          <h3>Hair Styling &amp; Bridal Updo Certification</h3>
+          <p>Blow-drying, ironing, braiding, and long-wear bridal updos built to hold through a full ceremony day.</p>
+          <div class="class-meta"><span>6 Weeks</span><span class="class-fee">₹17,999</span></div>
+        </div>
+      </div>
+
+      <div class="class-card">
+        <div class="class-photo"><img src="assets/NAIL_ART/NA5.jpg" alt="Nail Art Professional Course"></div>
+        <div class="class-body">
+          <span class="class-level">Beginner</span>
+          <h3>Nail Art Professional Course</h3>
+          <p>Gel application, extensions, and hand-painted art — chrome, French, ombré, and 3D finishing techniques.</p>
+          <div class="class-meta"><span>4 Weeks</span><span class="class-fee">₹9,999</span></div>
+        </div>
+      </div>
+
+      <div class="class-card">
+        <div class="class-photo"><img src="assets/FACE_CARE/fc5.jpg" alt="Skin Care and Facial Therapy"></div>
+        <div class="class-body">
+          <span class="class-level">Beginner</span>
+          <h3>Skin Care &amp; Facial Therapy</h3>
+          <p>Skin typing, facial techniques, de-tanning, and treatment sequencing for glowing, camera-ready skin.</p>
+          <div class="class-meta"><span>5 Weeks</span><span class="class-fee">₹12,999</span></div>
+        </div>
+      </div>
+
+      <div class="class-card">
+        <div class="class-photo"><img src="assets/HAIR_STYLING/HS12.jpg" alt="Beauty Parlour Management Diploma"></div>
+        <div class="class-body">
+          <span class="class-level">Advanced · Diploma</span>
+          <h3>Complete Parlour Management</h3>
+          <p>All four disciplines plus client handling, appointment systems, and running a studio of your own.</p>
+          <div class="class-meta"><span>16 Weeks</span><span class="class-fee">₹49,999</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- =========================== CTA BAND =========================== -->
+<div class="cta-band">
+  <div class="wrap">
+    <p class="eyebrow" style="justify-content:center; color:rgba(255,255,255,0.75);">Next Batch Starting Soon</p>
+    <h2 style="margin-top:18px;">Train under the Utsav Showroom team.</h2>
+    <p>Seats are limited per batch to keep hands-on time high. Reach out to check current availability and start dates.</p>
+    <a href="contact.html" class="btn btn-ivory">Enquire About a Course →</a>
+  </div>
+</div>
+
+<!-- =========================== FOOTER =========================== -->
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <h3>UTSAV SHOWROOM</h3>
+        <p>A curated world of wedding style, beauty and celebration.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Parlour</h4>
+        <a href="pages/hair-styling.html">Hair</a>
+        <a href="pages/makeup-looks.html">Makeup</a>
+        <a href="pages/nail-art.html">Nail Art</a>
+        <a href="pages/face-care.html">Skin &amp; Face</a>
+      </div>
+      <div class="foot-col">
+        <h4>Site</h4>
+        <a href="collections.html">Collections</a>
+        <a href="studio.html">Parlour</a>
+        <a href="classes.html">Classes</a>
+      </div>
+      <div class="foot-col">
+        <h4>Contact</h4>
+        <button type="button" class="footer-link-btn" data-book="Wedding Rental">Book a Slot</button>
+        <a href="tel:+919575929021">Call Us</a>
+        <a href="contact.html">Find the Showroom</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Utsav Showroom. All looks archived in-house.</span>
+      <span>Academy — 6 courses currently open for enrolment.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/app.js"></script>
+<script src="js/sidebar.js"></script>
+<script src="js/booking.js"></script>
+<script src="js/api-config.js"></script>
+<script src="js/api-integration.js"></script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!doctype html>
+<!-- =========================================================================
+     UTSAV SHOWROOM — GARBA DRESSES CATEGORY PAGE  (pages/garba-dresses.html)
+     =========================================================================
+     Intentionally EMPTY of static cards. Unlike the other 13 category
+     pages (which were pre-populated from the original catalog-data.js),
+     this category has no starting inventory — it's meant to be filled in
+     entirely through the existing (hidden) Admin → Inventory Management
+     panel. js/api-integration.js already knows how to fetch published
+     posts for a category and append them into whatever .grid it finds on
+     the page (see that file's injectAdminPosts()), so the moment an
+     admin adds a post under the "garba-dresses" category, it appears
+     here automatically — no further code changes needed.
+     ========================================================================= -->
+<html lang="en" data-theme="day">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Garba Dresses — Utsav Showroom</title>
+<meta name="description" content="Garba Dresses — festive Navratri and Garba wear at Utsav Showroom." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/sections.css">
+<link rel="stylesheet" href="../css/enhance.css">
+</head>
+<body data-root="sub">
+
+<nav class="nav">
+  <div class="wrap nav-row">
+    <a href="../index.html" class="wordmark">Utsav <em>Showroom</em></a>
+    <div class="nav-links">
+      <a href="../collections.html">Collections</a>
+      <a href="../spotlight.html">Spotlight</a>
+      <a href="../studio.html">Parlour</a>
+      <a href="../classes.html">Classes</a>
+      <a href="garba-dresses.html">Garba Dresses</a>
+      <a href="../contact.html">Contact</a>
+    </div>
+    <div class="nav-right">
+      <div class="toggle" id="themeToggle">
+        <span id="toggleLabel">Day</span>
+        <span class="toggle-track"><span class="toggle-thumb"></span></span>
+      </div>
+      <a href="../contact.html" class="nav-cta">Book a Slot</a>
+    </div>
+  </div>
+</nav>
+
+<section class="page-hero">
+  <div class="wrap">
+    <p class="crumb"><a href="../index.html">Home</a> / <a href="../collections.html">Collections</a> / Garba Dresses</p>
+    <h1>Garba Dresses</h1>
+    <p>Festive Navratri &amp; Garba wear — chaniya cholis, kediyus, and dandiya-ready sets.</p>
+    <div class="tags">
+      <span class="tag">New Collection</span>
+      <span class="tag">Rental</span>
+    </div>
+  </div>
+</section>
+
+<section class="page-body">
+  <div class="wrap">
+    <div class="grid card-mid reveal" id="garbaGrid">
+      <!-- Intentionally empty. Populated live from the backend by
+           js/api-integration.js once items are added via Admin →
+           Inventory Management under the "Garba Dresses" category. -->
+    </div>
+    <p class="mu-empty-note" id="garbaEmptyNote" style="text-align:center; color:var(--text-soft); padding:60px 20px; font-size:14px;">
+      New looks are on their way — check back soon, or ask us at the showroom.
+    </p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <h3>UTSAV SHOWROOM</h3>
+        <p>A curated world of wedding style, beauty and celebration.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Parlour</h4>
+        <a href="hair-styling.html">Hair</a>
+        <a href="makeup-looks.html">Makeup</a>
+        <a href="nail-art.html">Nail Art</a>
+        <a href="face-care.html">Skin &amp; Face</a>
+      </div>
+      <div class="foot-col">
+        <h4>Site</h4>
+        <a href="../collections.html">Collections</a>
+        <a href="../spotlight.html">Spotlight</a>
+        <a href="../classes.html">Classes</a>
+      </div>
+      <div class="foot-col">
+        <h4>Contact</h4>
+        <button type="button" class="footer-link-btn" data-book="Wedding Rental">Book a Slot</button>
+        <a href="tel:+919575929021">Call Us</a>
+        <a href="../contact.html">Find the Showroom</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Utsav Showroom. All looks archived in-house.</span>
+      <span>Garba Dresses collection — growing.</span>
+    </div>
+  </div>
+</footer>
+
+<div class="modal-overlay" id="detailModal">
+  <div class="modal-box">
+    <button type="button" class="modal-close" aria-label="Close">✕</button>
+    <div class="modal-photo"><img src="" alt=""></div>
+    <div class="modal-info">
+      <p class="eyebrow modal-eyebrow"></p>
+      <h2 class="modal-name"></h2>
+      <div class="modal-rating"></div>
+      <div class="modal-price"></div>
+      <p class="modal-desc"></p>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-solid modal-cta"></button>
+        <button type="button" class="modal-like" aria-label="Like">♡</button>
+        <button type="button" class="modal-share" aria-label="Share">⤴</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="../js/app.js"></script>
+<script src="../js/sidebar.js"></script>
+<script src="../js/booking.js"></script>
+<script src="../js/api-config.js"></script>
+<script src="../js/api-integration.js"></script>
+<script>
+  // Hide the "coming soon" note the moment any card actually appears
+  // (either injected by api-integration.js, or already present).
+  (function () {
+    const grid = document.getElementById('garbaGrid');
+    const note = document.getElementById('garbaEmptyNote');
+    function sync() { if (grid.children.length > 0) note.style.display = 'none'; }
+    sync();
+    new MutationObserver(sync).observe(grid, { childList: true });
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Edit Post — Utsav Showroom Admin</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+<div class="mu-shell">
+  <aside class="mu-sidebar">
+    <h1>Utsav Showroom<br>Admin</h1>
+    <nav>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="posts.html" class="active">Posts / Products</a>
+      <a href="inventory.html">Inventory</a>
+      <a href="categories.html">Categories</a>
+      <a href="admins.html">Manage Owners</a>
+    </nav>
+    <div class="mu-logout"><button class="btn" id="logoutBtn" style="width:100%">Log out</button></div>
+  </aside>
+  <main class="mu-main">
+    <div class="mu-topbar">
+      <h2 id="pageTitle">Create New Post</h2>
+      <div class="mu-inline">
+        <a class="btn" href="posts.html">← Back to Posts</a>
+      </div>
+    </div>
+
+    <!-- BASIC INFO -->
+    <div class="mu-card">
+      <h3>Basic information</h3>
+      <div class="mu-form-grid">
+        <div class="mu-form-row">
+          <label>Post title</label>
+          <input type="text" id="f_title">
+        </div>
+        <div class="mu-form-row">
+          <label>Slug (URL-safe, unique)</label>
+          <input type="text" id="f_slug">
+        </div>
+        <div class="mu-form-row">
+          <label>Category</label>
+          <select id="f_category"><option value="">— none —</option></select>
+        </div>
+        <div class="mu-form-row">
+          <label>Subcategory</label>
+          <select id="f_subcategory"><option value="">— none —</option></select>
+        </div>
+        <div class="mu-form-row">
+          <label>Template / Type</label>
+          <select id="f_type">
+            <option value="PRODUCT">Product</option>
+            <option value="COLLECTION">Collection</option>
+            <option value="EDITORIAL">Editorial</option>
+            <option value="LOOK">Look</option>
+            <option value="CUSTOM">Custom</option>
+          </select>
+        </div>
+        <div class="mu-form-row">
+          <label>Status</label>
+          <select id="f_status">
+            <option value="DRAFT">Draft</option>
+            <option value="PUBLISHED">Published</option>
+            <option value="ARCHIVED">Archived</option>
+          </select>
+        </div>
+      </div>
+      <div class="mu-form-row">
+        <label><input type="checkbox" id="f_featured" style="width:auto"> Featured on homepage</label>
+      </div>
+      <div class="mu-form-row">
+        <label>Short description</label>
+        <textarea id="f_short"></textarea>
+      </div>
+      <div class="mu-form-row">
+        <label>Full description</label>
+        <textarea id="f_full" style="min-height:120px"></textarea>
+      </div>
+    </div>
+
+    <!-- IMAGES -->
+    <div class="mu-card">
+      <h3>Images</h3>
+      <div class="mu-form-row">
+        <label>Cover image</label>
+        <div class="mu-inline">
+          <img id="coverPreview" class="mu-cover-preview" src="" alt="No cover image">
+          <div id="coverDropZone" class="mu-dropzone">
+            <div class="mu-dropzone-icon">⬆</div>
+            <div class="mu-dropzone-text">Drag an image here, or click to browse</div>
+            <div class="hint">JPG, PNG, or WEBP. This sets a new cover image.</div>
+            <input type="file" id="coverFile" accept=".jpg,.jpeg,.png,.webp" style="display:none">
+          </div>
+        </div>
+      </div>
+      <div class="mu-form-row">
+        <label>Gallery</label>
+        <div id="galleryDropZone" class="mu-dropzone mu-dropzone-wide">
+          <div class="mu-dropzone-icon">⬆</div>
+          <div class="mu-dropzone-text">Drag images here, or click to browse — just like uploading to Drive</div>
+          <input type="file" id="galleryFile" accept=".jpg,.jpeg,.png,.webp" multiple style="display:none">
+        </div>
+        <div class="mu-gallery" id="galleryList"></div>
+      </div>
+    </div>
+
+    <!-- PRODUCT INFO -->
+    <div class="mu-card">
+      <h3>Product information</h3>
+      <div class="mu-form-grid">
+        <div class="mu-form-row"><label>Price (₹)</label><input type="number" id="f_price"></div>
+        <div class="mu-form-row"><label>Unit / rental period</label><input type="text" id="f_unit" placeholder="/ 3 days"></div>
+        <div class="mu-form-row"><label>SKU</label><input type="text" id="f_sku"></div>
+        <div class="mu-form-row"><label>Brand</label><input type="text" id="f_brand"></div>
+        <div class="mu-form-row"><label>Materials</label><input type="text" id="f_materials"></div>
+        <div class="mu-form-row"><label>Size</label><input type="text" id="f_size"></div>
+        <div class="mu-form-row"><label>Dimensions</label><input type="text" id="f_dimensions"></div>
+        <div class="mu-form-row"><label>Availability</label><input type="text" id="f_availability" placeholder="In stock / Made to order"></div>
+      </div>
+      <div class="mu-form-row">
+        <label>Tags (comma-separated)</label>
+        <input type="text" id="f_tags">
+      </div>
+    </div>
+
+    <!-- FEATURES -->
+    <div class="mu-card">
+      <h3>Features</h3>
+      <div id="featuresList"></div>
+      <button class="btn" id="addFeatureBtn" type="button">+ Add Feature</button>
+    </div>
+
+    <!-- SECTIONS -->
+    <div class="mu-card">
+      <h3>Sections</h3>
+      <div id="sectionsList"></div>
+      <button class="btn" id="addSectionBtn" type="button">+ Add Section</button>
+    </div>
+
+    <div class="mu-card">
+      <button class="btn btn-primary" id="saveBtn" type="button">Save Post</button>
+      <span class="hint" id="saveHint"></span>
+    </div>
+  </main>
+</div>
+<script src="js/admin-api.js"></script>
+<script>
+const params = new URLSearchParams(location.search);
+const postId = params.get('id');
+let currentPost = null;
+
+function el(html) { const d = document.createElement('div'); d.innerHTML = html.trim(); return d.firstChild; }
+
+async function loadCategories() {
+  const { categories } = await api('/api/categories');
+  const catSel = document.getElementById('f_category');
+  categories.forEach(c => catSel.appendChild(el(`<option value="${c.id}">${c.label}</option>`)));
+
+  function refreshSubcats(selectedSubId) {
+    const cat = categories.find(c => c.id === catSel.value);
+    const subSel = document.getElementById('f_subcategory');
+    subSel.innerHTML = '<option value="">— none —</option>';
+    (cat ? cat.subcategories : []).forEach(s => subSel.appendChild(el(`<option value="${s.id}">${s.label}</option>`)));
+    if (selectedSubId) subSel.value = selectedSubId;
+  }
+  catSel.addEventListener('change', () => refreshSubcats());
+  return { categories, refreshSubcats };
+}
+
+// ---- Features ----
+function addFeatureRow(feature = {}) {
+  const list = document.getElementById('featuresList');
+  const block = el(`
+    <div class="mu-feature-block" data-id="${feature.id || ''}">
+      <div class="mu-block-head">
+        <strong>Feature</strong>
+        <button class="btn btn-sm btn-danger" type="button" data-remove>Remove</button>
+      </div>
+      <div class="mu-form-grid">
+        <div class="mu-form-row"><label>Feature title</label><input type="text" class="ft-title" value="${feature.title || ''}"></div>
+        <div class="mu-form-row"><label>Description</label><input type="text" class="ft-desc" value="${feature.description || ''}"></div>
+      </div>
+    </div>
+  `);
+  block.querySelector('[data-remove]').addEventListener('click', async () => {
+    if (block.dataset.id) { try { await api(`/api/features/${block.dataset.id}`, { method: 'DELETE' }); } catch (e) { toast(e.message, true); return; } }
+    block.remove();
+  });
+  list.appendChild(block);
+}
+
+// ---- Sections / Subsections ----
+function addSubsectionRow(sectionBlock, sub = {}) {
+  const list = sectionBlock.querySelector('.mu-subsections');
+  const block = el(`
+    <div class="mu-subsection-block" data-id="${sub.id || ''}">
+      <div class="mu-block-head">
+        <strong>Subsection</strong>
+        <span class="mu-inline">
+          <label style="font-weight:400;font-size:12px"><input type="checkbox" class="ss-visible" ${sub.visible !== false ? 'checked' : ''} style="width:auto"> Visible</label>
+          <button class="btn btn-sm btn-danger" type="button" data-remove>Remove</button>
+        </span>
+      </div>
+      <div class="mu-form-row"><label>Title</label><input type="text" class="ss-title" value="${sub.title || ''}"></div>
+      <div class="mu-form-row"><label>Content</label><textarea class="ss-content">${sub.content || ''}</textarea></div>
+    </div>
+  `);
+  block.querySelector('[data-remove]').addEventListener('click', async () => {
+    if (block.dataset.id) { try { await api(`/api/subsections/${block.dataset.id}`, { method: 'DELETE' }); } catch (e) { toast(e.message, true); return; } }
+    block.remove();
+  });
+  list.appendChild(block);
+}
+
+function addSectionRow(section = {}) {
+  const list = document.getElementById('sectionsList');
+  const block = el(`
+    <div class="mu-section-block" data-id="${section.id || ''}">
+      <div class="mu-block-head">
+        <strong>Section</strong>
+        <span class="mu-inline">
+          <label style="font-weight:400;font-size:12px"><input type="checkbox" class="sec-visible" ${section.visible !== false ? 'checked' : ''} style="width:auto"> Visible</label>
+          <button class="btn btn-sm btn-danger" type="button" data-remove>Remove Section</button>
+        </span>
+      </div>
+      <div class="mu-form-row"><label>Section title</label><input type="text" class="sec-title" value="${section.title || ''}"></div>
+      <div class="mu-form-row"><label>Content</label><textarea class="sec-content">${section.content || ''}</textarea></div>
+      <div class="mu-subsections"></div>
+      <button class="btn btn-sm" type="button" data-add-sub>+ Add Subsection</button>
+    </div>
+  `);
+  block.querySelector('[data-remove]').addEventListener('click', async () => {
+    if (block.dataset.id) { try { await api(`/api/sections/${block.dataset.id}`, { method: 'DELETE' }); } catch (e) { toast(e.message, true); return; } }
+    block.remove();
+  });
+  block.querySelector('[data-add-sub]').addEventListener('click', () => addSubsectionRow(block));
+  (section.subsections || []).forEach(s => addSubsectionRow(block, s));
+  list.appendChild(block);
+}
+
+// ---- Gallery rendering ----
+function renderGallery(images = []) {
+  const galleryList = document.getElementById('galleryList');
+  galleryList.innerHTML = '';
+  images.sort((a, b) => a.sortOrder - b.sortOrder).forEach(img => {
+    const item = el(`
+      <div class="mu-gallery-item" data-id="${img.id}">
+        <img src="${img.url}" alt="${img.alt || ''}">
+        <input type="file" class="gallery-replace-input" accept=".jpg,.jpeg,.png,.webp" style="display:none">
+        <div class="actions">
+          <button class="btn btn-sm" type="button" data-set-cover>Set cover</button>
+          <button class="btn btn-sm" type="button" data-replace>Replace</button>
+          <button class="btn btn-sm btn-danger" type="button" data-del>✕</button>
+        </div>
+      </div>
+    `);
+    item.querySelector('[data-set-cover]').addEventListener('click', async () => {
+      if (!currentPost) { toast('Save the post first.', true); return; }
+      try { await api(`/api/posts/${currentPost.id}`, { method: 'PUT', body: { coverImageId: img.id } }); toast('Cover image set.'); await loadPost(currentPost.id); }
+      catch (e) { toast(e.message, true); }
+    });
+    item.querySelector('[data-del]').addEventListener('click', async () => {
+      if (!confirm('Remove this image?')) return;
+      try { await api(`/api/images/${img.id}`, { method: 'DELETE' }); item.remove(); toast('Image removed.'); }
+      catch (e) { toast(e.message, true); }
+    });
+    const replaceInput = item.querySelector('.gallery-replace-input');
+    item.querySelector('[data-replace]').addEventListener('click', () => replaceInput.click());
+    replaceInput.addEventListener('change', async () => {
+      if (!replaceInput.files[0]) return;
+      const fd = new FormData();
+      fd.append('image', replaceInput.files[0]);
+      toast('Replacing image…');
+      try {
+        await apiUpload(`/api/images/${img.id}/replace`, fd, 'PUT');
+        toast('Image replaced.');
+        await loadPost(currentPost.id);
+      } catch (e) { toast(e.message, true); }
+    });
+    galleryList.appendChild(item);
+  });
+}
+
+async function uploadOneFile(file, { setCover } = {}) {
+  if (!currentPost) { toast('Save the post first, then upload images.', true); return; }
+  const fd = new FormData();
+  fd.append('image', file);
+  fd.append('postId', currentPost.id);
+  if (setCover) fd.append('setCover', '1');
+  try {
+    await apiUpload('/api/images/upload', fd);
+  } catch (e) { toast(e.message, true); }
+}
+
+async function uploadFileList(fileList, { setCover } = {}) {
+  if (!currentPost) { toast('Save the post first, then upload images.', true); return; }
+  const files = Array.from(fileList || []);
+  if (!files.length) return;
+  toast(files.length > 1 ? `Uploading ${files.length} images…` : 'Uploading…');
+  for (const file of files) {
+    await uploadOneFile(file, { setCover: setCover && file === files[0] });
+  }
+  toast('Upload complete.');
+  await loadPost(currentPost.id);
+}
+
+// Wires a drop-zone element: click-to-browse via its hidden <input type=file>,
+// plus real drag-and-drop, the same interaction pattern as Google Drive's
+// upload area — no code editing required, just drag an image in.
+function wireDropZone(zoneEl, inputEl, opts = {}) {
+  zoneEl.addEventListener('click', () => inputEl.click());
+  inputEl.addEventListener('change', () => {
+    uploadFileList(inputEl.files, opts);
+    inputEl.value = '';
+  });
+  ['dragenter', 'dragover'].forEach((evt) => {
+    zoneEl.addEventListener(evt, (e) => { e.preventDefault(); e.stopPropagation(); zoneEl.classList.add('dragover'); });
+  });
+  ['dragleave', 'drop'].forEach((evt) => {
+    zoneEl.addEventListener(evt, (e) => { e.preventDefault(); e.stopPropagation(); zoneEl.classList.remove('dragover'); });
+  });
+  zoneEl.addEventListener('drop', (e) => {
+    const files = e.dataTransfer && e.dataTransfer.files;
+    if (files && files.length) uploadFileList(files, opts);
+  });
+}
+
+wireDropZone(document.getElementById('coverDropZone'), document.getElementById('coverFile'), { setCover: true });
+wireDropZone(document.getElementById('galleryDropZone'), document.getElementById('galleryFile'), {});
+
+// ---- Load existing post ----
+async function loadPost(id) {
+  const { post } = await api(`/api/posts/id/${id}`);
+  currentPost = post;
+  document.getElementById('pageTitle').textContent = `Edit: ${post.title}`;
+  document.getElementById('f_title').value = post.title || '';
+  document.getElementById('f_slug').value = post.slug || '';
+  document.getElementById('f_type').value = post.type || 'PRODUCT';
+  document.getElementById('f_status').value = post.status || 'DRAFT';
+  document.getElementById('f_featured').checked = !!post.featured;
+  document.getElementById('f_short').value = post.shortDescription || '';
+  document.getElementById('f_full').value = post.fullDescription || '';
+  document.getElementById('f_price').value = post.price ?? '';
+  document.getElementById('f_unit').value = post.unit || '';
+  document.getElementById('f_sku').value = post.sku || '';
+  document.getElementById('f_brand').value = post.brand || '';
+  document.getElementById('f_materials').value = post.materials || '';
+  document.getElementById('f_size').value = post.size || '';
+  document.getElementById('f_dimensions').value = post.dimensions || '';
+  document.getElementById('f_availability').value = post.availability || '';
+  document.getElementById('f_tags').value = (post.tags || []).map(t => t.label).join(', ');
+  if (post.categoryId) document.getElementById('f_category').value = post.categoryId;
+  document.getElementById('coverPreview').src = post.coverImage ? post.coverImage.url : '';
+
+  document.getElementById('featuresList').innerHTML = '';
+  (post.features || []).forEach(addFeatureRow);
+  document.getElementById('sectionsList').innerHTML = '';
+  (post.sections || []).forEach(addSectionRow);
+  renderGallery(post.images || []);
+}
+
+async function collectAndSave() {
+  const body = {
+    title: document.getElementById('f_title').value.trim(),
+    slug: document.getElementById('f_slug').value.trim(),
+    type: document.getElementById('f_type').value,
+    status: document.getElementById('f_status').value,
+    featured: document.getElementById('f_featured').checked,
+    shortDescription: document.getElementById('f_short').value,
+    fullDescription: document.getElementById('f_full').value,
+    categoryId: document.getElementById('f_category').value || null,
+    subcategoryId: document.getElementById('f_subcategory').value || null,
+    price: document.getElementById('f_price').value === '' ? null : Number(document.getElementById('f_price').value),
+    unit: document.getElementById('f_unit').value,
+    sku: document.getElementById('f_sku').value || null,
+    brand: document.getElementById('f_brand').value,
+    materials: document.getElementById('f_materials').value,
+    size: document.getElementById('f_size').value,
+    dimensions: document.getElementById('f_dimensions').value,
+    availability: document.getElementById('f_availability').value,
+    tagLabels: document.getElementById('f_tags').value.split(',').map(s => s.trim()).filter(Boolean),
+  };
+  if (!body.title || !body.slug) { toast('Title and slug are required.', true); return; }
+
+  try {
+    if (currentPost) {
+      const { post } = await api(`/api/posts/${currentPost.id}`, { method: 'PUT', body });
+      currentPost = post;
+    } else {
+      const { post } = await api('/api/posts', { method: 'POST', body });
+      currentPost = post;
+      history.replaceState(null, '', `post-edit.html?id=${post.id}`);
+    }
+
+    // Save features (create new, update existing)
+    for (const block of document.querySelectorAll('#featuresList .mu-feature-block')) {
+      const title = block.querySelector('.ft-title').value.trim();
+      const description = block.querySelector('.ft-desc').value;
+      if (!title) continue;
+      if (block.dataset.id) await api(`/api/features/${block.dataset.id}`, { method: 'PUT', body: { title, description } });
+      else { const { feature } = await api(`/api/posts/${currentPost.id}/features`, { method: 'POST', body: { title, description } }); block.dataset.id = feature.id; }
+    }
+
+    // Save sections + subsections
+    for (const sBlock of document.querySelectorAll('#sectionsList .mu-section-block')) {
+      const title = sBlock.querySelector('.sec-title').value.trim();
+      const content = sBlock.querySelector('.sec-content').value;
+      const visible = sBlock.querySelector('.sec-visible').checked;
+      if (!title) continue;
+      let sectionId = sBlock.dataset.id;
+      if (sectionId) await api(`/api/sections/${sectionId}`, { method: 'PUT', body: { title, content, visible } });
+      else { const { section } = await api(`/api/posts/${currentPost.id}/sections`, { method: 'POST', body: { title, content, visible } }); sectionId = section.id; sBlock.dataset.id = sectionId; }
+
+      for (const subBlock of sBlock.querySelectorAll('.mu-subsection-block')) {
+        const stitle = subBlock.querySelector('.ss-title').value.trim();
+        const scontent = subBlock.querySelector('.ss-content').value;
+        const svisible = subBlock.querySelector('.ss-visible').checked;
+        if (!stitle) continue;
+        if (subBlock.dataset.id) await api(`/api/subsections/${subBlock.dataset.id}`, { method: 'PUT', body: { title: stitle, content: scontent, visible: svisible } });
+        else { const { subsection } = await api(`/api/sections/${sectionId}/subsections`, { method: 'POST', body: { title: stitle, content: scontent, visible: svisible } }); subBlock.dataset.id = subsection.id; }
+      }
+    }
+
+    toast('Post saved.');
+    await loadPost(currentPost.id);
+  } catch (e) { toast(e.message, true); }
+}
+
+document.getElementById('addFeatureBtn').addEventListener('click', () => addFeatureRow());
+document.getElementById('addSectionBtn').addEventListener('click', () => addSectionRow());
+document.getElementById('saveBtn').addEventListener('click', collectAndSave);
+
+document.getElementById('f_title').addEventListener('blur', () => {
+  const slugField = document.getElementById('f_slug');
+  if (!slugField.value) {
+    slugField.value = document.getElementById('f_title').value.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  }
+});
+
+(async function () {
+  await requireAdminSession();
+  document.getElementById('logoutBtn').addEventListener('click', async () => {
+    await api('/api/auth/logout', { method: 'POST' });
+    window.location.href = 'index.html';
+  });
+  await loadCategories();
+  if (postId) { try { await loadPost(postId); } catch (e) { toast(e.message, true); } }
+})();
+</script>
+</body>
+</html>

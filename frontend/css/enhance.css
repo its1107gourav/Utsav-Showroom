@@ -1,0 +1,375 @@
+/* =====================================================================
+   UTSAV SHOWROOM — ENHANCE.CSS
+   =====================================================================
+   Additive layer loaded AFTER base.css / sections.css / home.css on
+   every page. Nothing here is removed from the original files — this
+   file only adds the mobile sidebar, hero reel, revised collection
+   tiles, 4-column category grid, premium dark-mode palette fixes,
+   booking/payment/admin-OTP modals, and the restructured contact page.
+   ===================================================================== */
+
+/* ---------------------------------------------------------------------
+   0. NAV — hamburger button + Home link spacing
+--------------------------------------------------------------------- */
+.nav-row{ position:relative; }
+.hamburger{
+  display:flex; flex-direction:column; justify-content:center; gap:5px;
+  width:40px; height:40px; border:1px solid var(--line); border-radius:8px;
+  background:var(--surface-soft); cursor:pointer; padding:0; margin-left:6px;
+}
+.hamburger span{display:block; width:18px; height:2px; margin:0 auto; background:var(--text); border-radius:2px; transition:transform .3s ease, opacity .3s ease;}
+.hamburger[aria-expanded="true"] span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.hamburger[aria-expanded="true"] span:nth-child(2){opacity:0;}
+.hamburger[aria-expanded="true"] span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+.nav-home{order:-1;}
+.nav-user-login{
+  font-family:'IBM Plex Mono', monospace; font-size:10.5px; letter-spacing:0.05em; text-transform:uppercase;
+  color:var(--text); background:transparent; border:1px solid var(--line); border-radius:6px;
+  padding:9px 14px; cursor:pointer; white-space:nowrap;
+}
+.nav-user-login:hover{background:var(--surface-soft);}
+@media(max-width:640px){ .nav-user-login{display:none;} } /* stays reachable via the sidebar on small screens */
+
+.page-back-btn{
+  position:fixed; top:92px; left:18px; z-index:80;
+  display:flex; align-items:center; gap:6px;
+  font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:0.04em;
+  color:var(--text); background:var(--surface); border:1px solid var(--line); border-radius:20px;
+  padding:8px 14px 8px 12px; cursor:pointer; box-shadow:0 6px 20px rgba(0,0,0,0.08);
+}
+.page-back-btn:hover{ background:var(--surface-soft); }
+.page-back-btn span{ font-size:13px; }
+@media(max-width:640px){ .page-back-btn{ top:84px; left:12px; padding:7px 12px 7px 10px; } }
+
+/* ---------------------------------------------------------------------
+   1. MOBILE-FIRST SIDEBAR / DRAWER
+--------------------------------------------------------------------- */
+.sidebar-backdrop{
+  position:fixed; inset:0; z-index:990; background:rgba(10,4,7,0.55); backdrop-filter:blur(2px);
+  opacity:0; pointer-events:none; transition:opacity .35s ease;
+}
+.sidebar-backdrop.open{opacity:1; pointer-events:auto;}
+
+.sidebar-drawer{
+  position:fixed; top:0; right:0; height:100%; width:min(340px, 86vw); z-index:991;
+  background:var(--surface); border-left:1px solid var(--line);
+  box-shadow:-18px 0 50px rgba(0,0,0,0.25);
+  transform:translateX(100%); transition:transform .38s cubic-bezier(.2,.8,.25,1);
+  display:flex; flex-direction:column;
+}
+.sidebar-drawer.open{transform:translateX(0);}
+.sidebar-head{display:flex; align-items:center; justify-content:space-between; padding:20px 20px 16px; border-bottom:1px solid var(--line);}
+.sidebar-head .wordmark{font-size:17px;}
+.sidebar-close{width:34px; height:34px; border-radius:50%; border:1px solid var(--line); background:var(--surface-soft); cursor:pointer; font-size:16px; color:var(--text);}
+.sidebar-body{flex:1; overflow-y:auto; padding:10px 12px;}
+.sidebar-section{padding:10px 8px 4px; font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-soft);}
+.sidebar-link{
+  display:flex; align-items:center; gap:12px; width:100%; text-align:left;
+  padding:13px 12px; border-radius:8px; font-size:14.5px; color:var(--text);
+  background:transparent; border:none; cursor:pointer; font-family:'Manrope',sans-serif;
+}
+.sidebar-link:hover{background:var(--surface-soft);}
+.sidebar-link .ico{width:20px; text-align:center; opacity:.85;}
+.sidebar-badge{margin-left:auto; font-family:'IBM Plex Mono',monospace; font-size:10px; background:var(--pink-dark); color:#fff; padding:2px 7px; border-radius:20px;}
+html[data-theme="night"] .sidebar-badge{background:var(--gold); color:#170A0F;}
+.sidebar-foot{border-top:1px solid var(--line); padding:14px 12px 20px;}
+.sidebar-admin-btn{width:100%; justify-content:center;}
+
+/* ---------------------------------------------------------------------
+   2. HERO — vertical film-reel scroller, styled as real cards: a
+   stylish title band up top, a normal SQUARE image box below (not a
+   full-bleed cropped rectangle with text overlaid on it).
+--------------------------------------------------------------------- */
+.reel-wrap{
+  position:relative; width:470px; max-width:100%; height:600px; margin:0 auto;
+  justify-self:center; border-radius:var(--r-md); overflow:hidden;
+  background:var(--surface-soft);
+  -webkit-mask-image:linear-gradient(to bottom, transparent 0, black 28px, black calc(100% - 28px), transparent 100%);
+          mask-image:linear-gradient(to bottom, transparent 0, black 28px, black calc(100% - 28px), transparent 100%);
+}
+.reel-track{
+  display:flex; flex-direction:column; align-items:center; gap:14px; padding:14px 10px;
+  animation:reelScroll 34s linear infinite;
+}
+.reel-wrap:hover .reel-track{animation-play-state:paused;}
+@keyframes reelScroll{ 0%{transform:translateY(0);} 100%{transform:translateY(-50%);} }
+.reel-card{
+  flex:0 0 auto; width:450px; max-width:100%; display:flex; flex-direction:column; gap:0;
+  border-radius:var(--r-md); overflow:hidden; cursor:pointer;
+  background:var(--surface); border:1px solid var(--line);
+}
+.reel-title{
+  display:block; padding:10px 14px; font-family:'Bodoni Moda',serif; font-style:italic;
+  font-weight:600; font-size:15px; color:var(--text); background:var(--surface-soft);
+  border-bottom:1px solid var(--line);
+}
+.reel-photo{ display:block; width:100%; aspect-ratio:450/600; overflow:hidden; }
+.reel-photo img{ width:100%; height:100%; object-fit:cover; display:block; transition:transform .5s ease; }
+.reel-card:hover .reel-photo img{ transform:scale(1.06); }
+@media(max-width:900px){ .reel-wrap{width:360px; height:480px;} .reel-card{width:340px;} .reel-title{padding:8px 12px; font-size:13.5px;} }
+
+/* ---------------------------------------------------------------------
+   3. COLLECTIONS — three fixed rows, exact pixel dimensions:
+   Row 1 (Bridal Wear, Groom Wear, Couple Sets, Makeup Looks): 400×500, 4 cards only.
+   Row 2 (Bridal/Groom Jewellery, Pagdi & Safa, Juti & Footwear): 300×300, 4 cards only.
+   Row 3 (everything else): 320×450.
+   Each row never wraps to a second line — if the exact pixel widths
+   don't all fit, every card in that row shrinks by the same proportion
+   (width and height together, via aspect-ratio) until they do.
+--------------------------------------------------------------------- */
+.collection-rows{ display:flex; flex-direction:column; gap:16px; }
+.tile-row{ display:flex; gap:12px; justify-content:center; flex-wrap:nowrap; width:100%; }
+.tile-row .tile{ grid-column:unset; min-width:0; flex-shrink:1; }
+
+.tile-r1{ flex:0 1 400px; max-width:400px; aspect-ratio:400/550 !important; }
+.tile-r2{ flex:0 1 300px; max-width:300px; aspect-ratio:300/300 !important; }
+.tile-r3{ flex:0 1 320px; max-width:320px; aspect-ratio:320/450 !important; }
+
+.tile-row .tile img{
+  position:static !important; width:100% !important; height:100% !important;
+  object-fit:cover !important; display:block;
+}
+
+/* ---------------------------------------------------------------------
+   4. CATEGORY GRID — every card the same fixed size within a page, image
+   always fills its box (cropped to fit rather than leaving empty space).
+   Card height is now auto (= photo + info, exactly, no leftover empty
+   space and nothing can spill outside the box). Photo height is fixed
+   and untouched from here on; the info section was grown slightly (+3%
+   of the card's total height) and its internal spacing tightened, so
+   name/rating/availability/price/buttons fit without being clipped.
+   Applies only to subsection/category-page cards (.card.card-full
+   inside .grid) — homepage/Collections tiles untouched.
+--------------------------------------------------------------------- */
+.grid{
+  display:grid !important; grid-template-columns:repeat(5, 1fr) !important; gap:16px !important;
+}
+.card.card-full{ width:100%; height:auto !important; }
+.card-photo{
+  flex:0 0 336px !important; height:336px !important; max-height:none !important; aspect-ratio:auto !important;
+}
+.card-photo img{
+  position:static !important; width:100% !important; height:100% !important;
+  object-fit:cover !important; display:block;
+}
+.card-body{
+  flex:0 0 125px !important; height:125px !important; overflow:hidden; padding:8px 12px 10px !important; gap:3px !important;
+}
+.card-name{ font-size:13.5px !important; line-height:1.1 !important; }
+.card-meta{ line-height:1.1; }
+.card-price{ margin-top:0 !important; line-height:1.1; }
+.card-avail{ margin-top:0 !important; }
+.card-actions{ margin-top:3px !important; }
+.card-actions .btn{ padding:8px 9px !important; font-size:9px !important; }
+@media(max-width:1300px){ .grid{grid-template-columns:repeat(4, 1fr) !important;} }
+@media(max-width:1000px){ .grid{grid-template-columns:repeat(3, 1fr) !important;} .card-photo{flex-basis:312px !important; height:312px !important;} .card-body{flex-basis:116px !important; height:116px !important;} }
+@media(max-width:760px){ .grid{grid-template-columns:repeat(2, 1fr) !important; gap:12px !important;} .card-photo{flex-basis:264px !important; height:264px !important;} .card-body{flex-basis:99px !important; height:99px !important;} }
+@media(max-width:420px){ .card-body{padding:6px 8px 8px !important; flex-basis:90px !important; height:90px !important;} .card-name{font-size:12px !important;} .card-photo{flex-basis:240px !important; height:240px !important;} }
+
+/* availability badge on compact cards */
+.card-avail{font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--text-soft); display:flex; align-items:center; gap:6px; margin-top:2px;}
+.card-avail .dot{width:7px; height:7px; border-radius:50%; background:#3FAE5C;}
+.card-avail.low .dot{background:#D98A1E;}
+
+/* two-button product actions row on full category cards */
+.card-actions{display:flex; gap:8px; margin-top:10px;}
+.card-actions .card-cta{margin-top:0; flex:1;}
+.btn-visit{flex:0 0 auto; padding:11px 14px; font-size:10.5px;}
+
+/* ---------------------------------------------------------------------
+   5. DARK MODE — remove gradient buttons/text, prefer solid premium
+   colours: black, deep maroon, wine, burgundy, muted gold, with light
+   gold/pink/cream highlights for readability.
+--------------------------------------------------------------------- */
+html[data-theme="night"]{
+  --wine:#6B0F2B; --burgundy:#4A1420; --muted-gold:#C9A24B; --cream:#F4E7DD; --lightpink:#E7A6B8;
+}
+html[data-theme="night"] .wordmark em{ background:none; -webkit-text-fill-color:initial; color:var(--muted-gold); }
+html[data-theme="night"] .nav-cta{ background:var(--wine); color:var(--cream); border:1px solid var(--muted-gold); }
+html[data-theme="night"] .toggle-thumb{ background:var(--muted-gold); }
+html[data-theme="night"] .btn-solid{ background:var(--wine); color:var(--cream); border:1px solid var(--muted-gold); }
+html[data-theme="night"] .hero-copy h1 i, html[data-theme="night"] .page-hero h1 i{ background:none; -webkit-text-fill-color:initial; color:var(--muted-gold); }
+html[data-theme="night"] .hero-stat .num{ background:none; -webkit-text-fill-color:initial; color:var(--muted-gold); }
+html[data-theme="night"] .cta-band{ background:var(--burgundy); color:var(--cream); border-top:1px solid var(--line); }
+html[data-theme="night"] .btn-ivory{ background:var(--muted-gold); color:#170A0F; border:none; }
+html[data-theme="night"] .icon-btn.liked{ color:var(--muted-gold); background:#170A0F; }
+html[data-theme="night"] .card, html[data-theme="night"] .contact-form, html[data-theme="night"] .contact-row, html[data-theme="night"] .booking-modal, html[data-theme="night"] .payment-modal, html[data-theme="night"] .sidebar-drawer{
+  border-color:var(--line);
+}
+html[data-theme="night"] .modal-cta{ background:var(--wine); }
+
+/* ---------------------------------------------------------------------
+   6. FLOATING MODALS — booking window, payment window, admin OTP
+--------------------------------------------------------------------- */
+.floating-overlay{
+  position:fixed; inset:0; z-index:998; background:rgba(10,4,7,0.6); backdrop-filter:blur(5px);
+  display:none; align-items:flex-end; justify-content:center; padding:0;
+}
+.floating-overlay.open{display:flex;}
+@media(min-width:640px){ .floating-overlay{align-items:center; padding:20px;} }
+
+.floating-panel{
+  background:var(--surface); width:100%; max-width:460px; max-height:92vh; overflow-y:auto;
+  border-radius:18px 18px 0 0; border:1px solid var(--line); position:relative;
+  padding:22px 20px 26px; box-shadow:0 -10px 40px rgba(0,0,0,0.25);
+  animation:panelUp .3s cubic-bezier(.2,.8,.25,1);
+}
+@media(min-width:640px){ .floating-panel{border-radius:16px;} }
+@keyframes panelUp{ from{transform:translateY(24px); opacity:0;} to{transform:translateY(0); opacity:1;} }
+.floating-close{position:absolute; top:14px; right:14px; width:32px; height:32px; border-radius:50%; border:1px solid var(--line); background:var(--surface-soft); cursor:pointer; font-size:15px;}
+.floating-title{font-family:'Bodoni Moda',serif; font-style:italic; font-weight:600; font-size:22px; margin-bottom:4px; padding-right:30px;}
+.floating-sub{font-size:12.5px; color:var(--text-soft); margin-bottom:18px;}
+
+.booking-product{display:flex; gap:12px; align-items:center; background:var(--surface-soft); border:1px solid var(--line); border-radius:10px; padding:10px; margin-bottom:16px;}
+.booking-product img{width:56px; height:56px; border-radius:8px; object-fit:cover;}
+.booking-product .bp-name{font-family:'Bodoni Moda',serif; font-style:italic; font-weight:600; font-size:14px;}
+.booking-product .bp-price{font-size:12px; color:var(--text-soft); margin-top:2px;}
+
+.field-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+.f-row{margin-bottom:14px; display:flex; flex-direction:column; gap:6px;}
+.f-row label{font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-soft);}
+.f-row label .req{color:var(--pink-dark);}
+html[data-theme="night"] .f-row label .req{color:var(--muted-gold);}
+.f-row input, .f-row select, .f-row textarea{
+  font-family:'Manrope', sans-serif; font-size:14px; padding:11px 12px;
+  background:var(--surface-soft); border:1px solid var(--line); border-radius:8px; color:var(--text); width:100%;
+}
+.form-error{background:rgba(194,30,109,0.1); border:1px solid var(--pink-dark); color:var(--pink-dark); font-size:12.5px; padding:10px 12px; border-radius:8px; margin-bottom:14px; display:none;}
+.form-error.show{display:block;}
+html[data-theme="night"] .form-error{background:rgba(107,15,43,0.35); border-color:var(--wine); color:var(--lightpink);}
+
+.pay-methods{display:flex; flex-direction:column; gap:10px; margin:16px 0 20px;}
+.pay-method{display:flex; align-items:center; gap:12px; border:1px solid var(--line); border-radius:10px; padding:13px 14px; cursor:pointer; background:var(--surface-soft);}
+.pay-method input{margin:0;}
+.pay-method.selected{border-color:var(--pink-dark);}
+html[data-theme="night"] .pay-method.selected{border-color:var(--muted-gold);}
+.pay-summary{display:flex; justify-content:space-between; font-size:13.5px; padding:10px 0; border-top:1px solid var(--line); margin-top:6px;}
+.pay-summary strong{font-size:16px;}
+
+.state-row{display:flex; flex-direction:column; align-items:center; text-align:center; gap:10px; padding:30px 10px;}
+.spinner{width:34px; height:34px; border-radius:50%; border:3px solid var(--line); border-top-color:var(--pink-dark); animation:spin .8s linear infinite;}
+html[data-theme="night"] .spinner{border-top-color:var(--muted-gold);}
+@keyframes spin{to{transform:rotate(360deg);}}
+.state-icon{font-size:38px;}
+.state-icon.success{color:#3FAE5C;}
+.state-icon.error{color:var(--pink-dark);}
+
+/* ---------------------------------------------------------------------
+   7. MY ORDERS panel
+--------------------------------------------------------------------- */
+.orders-list{display:flex; flex-direction:column; gap:12px; margin-top:14px;}
+.order-card{border:1px solid var(--line); border-radius:10px; padding:12px; display:flex; gap:12px; background:var(--surface-soft);}
+.order-card img{width:52px; height:52px; border-radius:8px; object-fit:cover;}
+.order-card .oc-name{font-family:'Bodoni Moda',serif; font-style:italic; font-weight:600; font-size:14px;}
+.order-card .oc-meta{font-size:11.5px; color:var(--text-soft); margin-top:3px;}
+.order-status{font-family:'IBM Plex Mono',monospace; font-size:9.5px; text-transform:uppercase; padding:3px 8px; border-radius:20px; margin-top:6px; display:inline-block;}
+.order-status.confirmed{background:rgba(63,174,92,0.15); color:#2C7A45;}
+.order-status.pending_payment{background:rgba(217,138,30,0.15); color:#A56412;}
+.order-status.cancelled{background:rgba(194,30,109,0.12); color:var(--pink-dark);}
+
+/* ---------------------------------------------------------------------
+   8. CONTACT — three premium sections + Book a Slot sub-panel
+--------------------------------------------------------------------- */
+.contact-tri{display:grid; grid-template-columns:repeat(3,1fr); gap:22px; margin-bottom:50px;}
+.contact-tri-card{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:28px 24px; text-align:left; cursor:pointer; transition:transform .25s ease, box-shadow .25s ease;}
+.contact-tri-card:hover{transform:translateY(-4px); box-shadow:0 18px 34px rgba(52,23,46,0.14);}
+.contact-tri-card h3{font-size:20px; margin-bottom:8px;}
+.contact-tri-card p{font-size:13px; color:var(--text-soft); line-height:1.6; margin-bottom:16px;}
+@media(max-width:860px){ .contact-tri{grid-template-columns:1fr;} }
+
+/* ---------------------------------------------------------------------
+   9. GENERIC UTILS
+--------------------------------------------------------------------- */
+.hide-on-mount{display:none !important;}
+body.sidebar-locked{overflow:hidden;}
+
+/* ---------------------------------------------------------------------
+   10. BEAUTY CLASSES — attractive image+copy feature band
+--------------------------------------------------------------------- */
+.classes-feature{
+  display:flex; flex-wrap:wrap; gap:40px; align-items:center; justify-content:center;
+  background:var(--surface-soft); border:1px solid var(--line); border-radius:var(--r-lg);
+  overflow:hidden; padding:32px;
+}
+.classes-feature-photo{ position:relative; width:500px; height:700px; max-width:100%; flex-shrink:0; border-radius:var(--r-md); overflow:hidden; }
+.classes-feature-photo img{ width:100%; height:100%; object-fit:cover; display:block; }
+.classes-feature-badge{
+  position:absolute; top:18px; left:18px; background:var(--pink-dark); color:#fff;
+  font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:0.06em; text-transform:uppercase;
+  padding:6px 12px; border-radius:20px;
+}
+html[data-theme="night"] .classes-feature-badge{ background:var(--gold); color:#170A0F; }
+.classes-feature-copy{ flex:1 1 320px; min-width:280px; padding:12px 8px; }
+.classes-feature-copy h2{ margin:8px 0 12px; font-size:clamp(24px,3vw,34px); }
+.classes-feature-copy > p{ color:var(--text-soft); max-width:460px; margin-bottom:18px; }
+.classes-feature-list{ list-style:none; padding:0; margin:0 0 24px; display:flex; flex-direction:column; gap:8px; }
+.classes-feature-list li{ font-size:13.5px; color:var(--text); display:flex; align-items:center; gap:10px; }
+.classes-feature-list li::before{ content:'✓'; color:var(--pink-dark); font-weight:700; }
+html[data-theme="night"] .classes-feature-list li::before{ color:var(--gold); }
+@media(max-width:640px){
+  .classes-feature-photo{ width:100%; height:auto; aspect-ratio:500/700; }
+  .classes-feature{ padding:20px; }
+}
+
+/* =====================================================================
+   MOBILE + TABLET ONLY FIXES  (everything below is wrapped in a
+   max-width media query — nothing here changes desktop/PC view)
+   =====================================================================
+   Fixes, in order:
+   1. Favorite/share icon buttons — too large at mobile widths on every
+      card site-wide (Collections tiles, category cards, homepage
+      spotlight cards, the modal), making them overlap card text.
+   2. Collections section — the desktop 3-fixed-pixel-row layout
+      (400/300/320px cards) has no room to breathe on a phone: forcing
+      3-4 cards into one row via flex-shrink squeezed each card down to
+      ~90px wide, making every label illegible. Replaced with a simple,
+      comfortable 2-per-row wrapping grid on mobile/tablet only.
+   3. Product detail modal — Rent Now/Book Appointment reordered to
+      appear right after the rating, before price/description, so it's
+      not buried below a long description on a short mobile viewport.
+   4. Hero reel — was a fixed 360px width that could overflow a narrow
+      phone screen (touching the right edge); now responsive with even
+      margin on both sides.
+   ===================================================================== */
+@media(max-width:900px){
+
+  /* ---- 1. Icon buttons (favorite/share) — every card, every modal ---- */
+  .card-icon-row{ top:6px; right:6px; gap:5px; }
+  .icon-btn{ width:22px; height:22px; font-size:10px; }
+  .modal-like, .modal-share{ width:38px; height:38px; font-size:15px; }
+
+  /* ---- 2. Collections — simple 2-per-row wrapping grid ---- */
+  .tile-row{ flex-wrap:wrap; justify-content:center; }
+  .tile-r1, .tile-r2, .tile-r3{
+    flex:0 1 47% !important; max-width:47% !important; width:47% !important;
+    aspect-ratio:3/4.2 !important;
+  }
+  .tile-cat{ font-size:7.5px; }
+  .tile-name{ font-size:12px !important; margin-top:2px; }
+  .tile-count{ font-size:8px; }
+  .tile-link{ font-size:8px; margin-top:3px; }
+
+  /* ---- 3. Product detail modal — CTA visible before price/desc ---- */
+  .modal-info .eyebrow{ order:0; }
+  .modal-name{ order:1; }
+  .modal-rating{ order:2; }
+  .modal-actions{ order:3; }
+  .modal-price{ order:4; }
+  .modal-desc{ order:5; }
+
+  /* ---- 4. Hero reel — responsive width, even side margins ---- */
+  .reel-wrap{ width:calc(100% - 32px) !important; max-width:360px !important; margin:0 auto; }
+  .reel-card{ width:100% !important; }
+}
+
+@media(max-width:480px){
+  /* Very small phones: keep the 2-per-row Collections grid, just trim
+     the gap and card height a touch more so nothing feels cramped. */
+  .tile-row{ gap:8px; }
+  .tile-r1, .tile-r2, .tile-r3{ aspect-ratio:3/4.4 !important; }
+
+  .icon-btn{ width:20px; height:20px; font-size:9px; }
+  .card-icon-row{ gap:4px; }
+
+  .reel-wrap{ width:calc(100% - 24px) !important; }
+}

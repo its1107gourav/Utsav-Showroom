@@ -1,0 +1,164 @@
+/* =====================================================================
+   UTSAV SHOWROOM — SECTIONS.CSS
+   =====================================================================
+   WHAT THIS FILE IS FOR
+   Reusable SECTION components that appear on more than one page —
+   split out from home.css so pages other than the homepage (Collections,
+   Spotlight, Studio, Classes, Contact, and later the 14 category pages)
+   can reuse them without duplicating CSS. Loaded after base.css.
+
+   Load order on any page that needs these blocks:
+     <link rel="stylesheet" href="css/base.css">      (always)
+     <link rel="stylesheet" href="css/sections.css">  (if using any block below)
+     <link rel="stylesheet" href="css/home.css">      (homepage hero only)
+
+   CONTENTS
+     1. SEC / SEC-HEAD    — generic "eyebrow + title + intro" section header
+     2. CHIPS BAND         — the scrolling pill-link row (used under every hero)
+     3. BEAUTY BAND         — the 5-up "known for" highlight row
+     4. BENTO GRID           — the size-by-depth collection tiles
+     5. SPOTLIGHT ROWS        — per-category horizontal scroll strips
+     6. SERVICE LEDGER         — the 4-discipline studio list
+     7. CTA BAND                — the closing "Reserve Your Slot" band
+   ===================================================================== */
+
+
+/* ---------------------------------------------------------------------
+   1. SEC / SEC-HEAD
+--------------------------------------------------------------------- */
+.sec{padding:90px 0;}
+.sec-head{display:flex; justify-content:space-between; align-items:flex-end; gap:30px; margin-bottom:44px; flex-wrap:wrap;}
+.sec-head h2{font-size:clamp(28px,3vw,40px); font-weight:600; max-width:15ch;}
+.sec-head p{max-width:36ch; font-size:13.5px; line-height:1.6; color:var(--text-soft);}
+
+
+/* ---------------------------------------------------------------------
+   2. CHIPS BAND — scrolling row of pill links to every category page
+--------------------------------------------------------------------- */
+.chips-band{background:var(--surface); border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:20px 0; overflow-x:auto;}
+.chips{display:flex; gap:12px; width:max-content; padding:0 2px;}
+.chip{font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:0.05em; text-transform:uppercase; padding:10px 18px; border:1px solid var(--line); border-radius:30px; color:var(--text-soft); transition:all .25s ease; white-space:nowrap;}
+.chip:hover{border-color:var(--pink-dark); color:var(--pink-dark);}
+html[data-theme="night"] .chip:hover{border-color:var(--gold); color:var(--gold);}
+
+
+/* ---------------------------------------------------------------------
+   3. BEAUTY BAND — "known for" 5-up highlight row
+--------------------------------------------------------------------- */
+.beauty-band{padding:80px 0 40px;}
+.beauty-head{text-align:center; max-width:640px; margin:0 auto 46px;}
+.beauty-head h2{font-size:clamp(28px,3.4vw,44px); font-weight:600; margin-top:14px;}
+.beauty-head p{color:var(--text-soft); font-size:14.5px; line-height:1.7; margin-top:14px;}
+.beauty-row{display:grid; grid-template-columns:repeat(5,1fr); gap:16px;}
+.beauty-card{position:relative; border-radius:var(--r-md); overflow:hidden; aspect-ratio:3/4; background:var(--surface-soft);}
+.beauty-card img{width:100%; height:100%; object-fit:cover; transition:transform .6s ease;}
+.beauty-card:hover img{transform:scale(1.08);}
+.beauty-card .ov{position:absolute; inset:0; background:linear-gradient(0deg, rgba(20,7,15,0.82) 0%, rgba(20,7,15,0.05) 60%); display:flex; flex-direction:column; justify-content:flex-end; padding:16px;}
+.beauty-card .nm{color:#fff; font-family:'Bodoni Moda', serif; font-style:italic; font-weight:600; font-size:16px;}
+.beauty-card .ct{color:rgba(255,255,255,0.75); font-family:'IBM Plex Mono', monospace; font-size:9.5px; text-transform:uppercase; margin-top:3px;}
+@media(max-width:900px){ .beauty-row{grid-template-columns:repeat(3,1fr);} }
+@media(max-width:560px){ .beauty-row{grid-template-columns:repeat(2,1fr);} }
+
+
+/* ---------------------------------------------------------------------
+   4. BENTO GRID — size-by-depth collection tiles (small scale)
+--------------------------------------------------------------------- */
+.bento{display:grid; grid-template-columns:repeat(8, 1fr); gap:10px;}
+.tile{position:relative; overflow:hidden; border-radius:var(--r-sm); background:var(--surface-soft); display:block;}
+.tile img{width:100%; height:100%; object-fit:cover; transition:transform .6s ease;}
+.tile:hover img{transform:scale(1.08);}
+.tile-lg{grid-column:span 3; aspect-ratio:1/1;}
+.tile-md{grid-column:span 2; aspect-ratio:1/1;}
+.tile-sm{grid-column:span 2; aspect-ratio:1/1;}
+.tile-overlay{position:absolute; inset:0; background:linear-gradient(0deg, rgba(20,7,15,0.78) 0%, rgba(20,7,15,0.05) 55%); display:flex; flex-direction:column; justify-content:flex-end; padding:12px;}
+.tile-cat{color:#F4E7EF; font-family:'IBM Plex Mono', monospace; font-size:8.5px; letter-spacing:0.08em; text-transform:uppercase; opacity:0.75;}
+.tile-name{color:#fff; font-family:'Bodoni Moda', serif; font-size:clamp(13px,1.3vw,17px); font-weight:600; margin-top:3px;}
+.tile-count{color:#F4E7EF; font-family:'IBM Plex Mono', monospace; font-size:9px; margin-top:2px; opacity:0.85;}
+@media(max-width:760px){ .bento{grid-template-columns:repeat(4,1fr);} .tile-lg{grid-column:span 2;} .tile-md{grid-column:span 2;} .tile-sm{grid-column:span 2;} }
+
+
+/* ---------------------------------------------------------------------
+   5. SPOTLIGHT ROWS — per-category horizontal scroll strips
+--------------------------------------------------------------------- */
+.spotlight{padding:64px 0; border-top:1px solid var(--line);}
+.spotlight-head{display:flex; align-items:baseline; gap:18px; margin-bottom:26px; flex-wrap:wrap;}
+.spotlight-head h3{font-size:clamp(22px,2.4vw,29px); font-weight:600;}
+.spotlight-head .count{font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--text-soft);}
+.spotlight-head .count a{color:var(--pink-dark);}
+html[data-theme="night"] .spotlight-head .count a{color:var(--gold);}
+.spot-bar{width:44px; height:3px; border-radius:2px; margin-bottom:14px;}
+.bar-pink{background:linear-gradient(90deg,var(--pink-dark),var(--pink-baby));}
+.bar-purple{background:linear-gradient(90deg,var(--purple),var(--lavender));}
+.bar-gold{background:linear-gradient(90deg,var(--gold),var(--pink-dark));}
+.spot-row{display:flex; gap:14px; overflow-x:auto; scroll-snap-type:x mandatory; padding-bottom:10px; scrollbar-width:none;}
+.spot-row::-webkit-scrollbar{display:none;}
+.spot-card{flex:0 0 auto; width:190px; height:250px; border-radius:var(--r-md); overflow:hidden; scroll-snap-align:start; background:var(--surface-soft); position:relative;}
+.spot-card img{width:100%; height:100%; object-fit:cover; transition:transform .6s ease;}
+.spot-card:hover img{transform:scale(1.07);}
+
+/* explicit navigation link inside a compact card (bento tile / beauty
+   card) that goes to the full category page — separate from clicking
+   the photo itself, which opens the quick-view modal instead */
+.tile-link{position:relative; z-index:3; display:inline-block; margin-top:4px; font-family:'IBM Plex Mono', monospace; font-size:9px; letter-spacing:0.06em; text-transform:uppercase; color:#fff; text-decoration:underline; text-underline-offset:3px;}
+.tile-link:hover{color:var(--gold);}
+
+
+/* ---------------------------------------------------------------------
+   6. SERVICE LEDGER — 4-discipline studio services list
+--------------------------------------------------------------------- */
+.ledger-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:var(--r-md); overflow:hidden;}
+.ledger-cell{background:var(--surface); padding:32px 24px;}
+.ledger-num{font-family:'IBM Plex Mono',monospace; color:var(--pink-dark); font-size:11px; margin-bottom:12px; display:block;}
+html[data-theme="night"] .ledger-num{color:var(--gold);}
+.ledger-cell h3{font-size:20px; font-weight:600; margin-bottom:12px;}
+.ledger-cell p{font-size:13px; line-height:1.65; color:var(--text-soft);}
+@media(max-width:900px){ .ledger-grid{grid-template-columns:repeat(2,1fr);} }
+@media(max-width:560px){ .ledger-grid{grid-template-columns:1fr;} }
+
+
+/* ---------------------------------------------------------------------
+   7. CTA BAND — closing "Reserve Your Slot" band
+--------------------------------------------------------------------- */
+.cta-band{background:linear-gradient(120deg, var(--purple), var(--pink-dark)); color:#fff; padding:90px 0; text-align:center;}
+html[data-theme="night"] .cta-band{background:linear-gradient(120deg, #170A0F, #4A1420); color:var(--gold);}
+.cta-band h2{font-size:clamp(30px,3.8vw,50px); font-weight:600; margin-bottom:16px;}
+.cta-band p{opacity:0.85; max-width:46ch; margin:0 auto 28px; font-size:14px; line-height:1.7;}
+
+
+/* ---------------------------------------------------------------------
+   8. CLASSES GRID — course cards for the new Classes / Academy page
+--------------------------------------------------------------------- */
+.class-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:22px;}
+.class-card{background:var(--surface); border:1px solid var(--line); border-radius:var(--r-md); overflow:hidden; display:flex; flex-direction:column;}
+.class-photo{aspect-ratio:4/3; overflow:hidden; background:var(--surface-soft);}
+.class-photo img{width:100%; height:100%; object-fit:cover; transition:transform .6s ease;}
+.class-card:hover .class-photo img{transform:scale(1.07);}
+.class-body{padding:22px 22px 24px; display:flex; flex-direction:column; gap:10px; flex:1;}
+.class-level{font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:0.08em; text-transform:uppercase; color:var(--pink-dark);}
+html[data-theme="night"] .class-level{color:var(--gold);}
+.class-body h3{font-family:'Bodoni Moda', serif; font-style:italic; font-weight:600; font-size:20px;}
+.class-body p{font-size:13px; line-height:1.6; color:var(--text-soft); flex:1;}
+.class-meta{display:flex; justify-content:space-between; align-items:center; font-family:'IBM Plex Mono', monospace; font-size:11.5px; color:var(--text-soft); border-top:1px solid var(--line); padding-top:12px; margin-top:4px;}
+.class-fee{font-family:'Manrope', sans-serif; font-weight:800; font-size:17px; color:var(--text);}
+@media(max-width:900px){ .class-grid{grid-template-columns:repeat(2,1fr);} }
+@media(max-width:600px){ .class-grid{grid-template-columns:1fr;} }
+
+
+/* ---------------------------------------------------------------------
+   9. CONTACT GRID — info cards + static enquiry form for contact.html
+--------------------------------------------------------------------- */
+.contact-grid{display:grid; grid-template-columns:1fr 1fr; gap:40px;}
+.contact-info{display:flex; flex-direction:column; gap:1px; background:var(--line); border:1px solid var(--line); border-radius:var(--r-md); overflow:hidden;}
+.contact-row{background:var(--surface); padding:24px 26px;}
+.contact-row h4{font-family:'IBM Plex Mono', monospace; font-size:10.5px; letter-spacing:0.08em; text-transform:uppercase; color:var(--pink-dark); margin-bottom:8px;}
+html[data-theme="night"] .contact-row h4{color:var(--gold);}
+.contact-row p{font-size:14px; line-height:1.6; color:var(--text);}
+.contact-form{background:var(--surface); border:1px solid var(--line); border-radius:var(--r-md); padding:32px;}
+.form-row{margin-bottom:18px; display:flex; flex-direction:column; gap:8px;}
+.form-row label{font-family:'IBM Plex Mono', monospace; font-size:10.5px; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-soft);}
+.form-row input, .form-row select, .form-row textarea{
+  font-family:'Manrope', sans-serif; font-size:14px; padding:12px 14px;
+  background:var(--surface-soft); border:1px solid var(--line); border-radius:6px; color:var(--text);
+}
+.form-row textarea{resize:vertical; min-height:90px;}
+@media(max-width:860px){ .contact-grid{grid-template-columns:1fr;} }

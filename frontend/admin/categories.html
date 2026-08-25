@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Categories — Utsav Showroom Admin</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+<div class="mu-shell">
+  <aside class="mu-sidebar">
+    <h1>Utsav Showroom<br>Admin</h1>
+    <nav>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="posts.html">Posts / Products</a>
+      <a href="inventory.html">Inventory</a>
+      <a href="categories.html" class="active">Categories</a>
+      <a href="admins.html">Manage Owners</a>
+    </nav>
+    <div class="mu-logout"><button class="btn" id="logoutBtn" style="width:100%">Log out</button></div>
+  </aside>
+  <main class="mu-main">
+    <div class="mu-topbar"><h2>Categories</h2></div>
+
+    <div class="mu-card">
+      <h3>Add category</h3>
+      <div class="mu-form-grid">
+        <div class="mu-form-row"><label>Key (unique code, e.g. BRIDAL_WEAR)</label><input type="text" id="c_key"></div>
+        <div class="mu-form-row"><label>Slug (URL, e.g. bridal-wear)</label><input type="text" id="c_slug"></div>
+        <div class="mu-form-row"><label>Label</label><input type="text" id="c_label"></div>
+        <div class="mu-form-row"><label>Type</label>
+          <select id="c_type"><option value="rental">Rental</option><option value="service">Service</option></select>
+        </div>
+      </div>
+      <div class="mu-form-row"><label>Blurb</label><input type="text" id="c_blurb"></div>
+      <button class="btn btn-primary" id="addCatBtn" type="button">Add Category</button>
+    </div>
+
+    <div id="catList"></div>
+  </main>
+</div>
+<script src="js/admin-api.js"></script>
+<script>
+function el(html) { const d = document.createElement('div'); d.innerHTML = html.trim(); return d.firstChild; }
+
+async function loadCategories() {
+  const { categories } = await api('/api/categories');
+  const listEl = document.getElementById('catList');
+  listEl.innerHTML = '';
+  categories.forEach(cat => {
+    const block = el(`
+      <div class="mu-card">
+        <div class="mu-block-head">
+          <strong>${cat.label} <span class="hint">(${cat.key} / ${cat.slug})</span></strong>
+          <button class="btn btn-sm btn-danger" data-del-cat="${cat.id}">Delete category</button>
+        </div>
+        <div class="mu-form-row"><em>${cat.blurb || ''}</em></div>
+        <table class="mu-table">
+          <thead><tr><th>Subcategory</th><th>Slug</th><th></th></tr></thead>
+          <tbody>
+            ${cat.subcategories.map(s => `<tr><td>${s.label}</td><td>${s.slug}</td><td><button class="btn btn-sm btn-danger" data-del-sub="${s.id}">Delete</button></td></tr>`).join('') || '<tr><td colspan="3" class="mu-empty">No subcategories yet.</td></tr>'}
+          </tbody>
+        </table>
+        <div class="mu-inline" style="margin-top:10px">
+          <input type="text" placeholder="Subcategory label" class="sub-label" style="width:180px">
+          <input type="text" placeholder="slug" class="sub-slug" style="width:120px">
+          <button class="btn btn-sm" data-add-sub="${cat.id}">+ Add Subcategory</button>
+        </div>
+      </div>
+    `);
+    block.querySelector('[data-del-cat]').addEventListener('click', async () => {
+      if (!confirm('Delete this category? Posts in it will lose their category link.')) return;
+      try { await api(`/api/categories/${cat.id}`, { method: 'DELETE' }); toast('Deleted.'); loadCategories(); }
+      catch (e) { toast(e.message, true); }
+    });
+    block.querySelectorAll('[data-del-sub]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        try { await api(`/api/categories/subcategories/${btn.dataset.delSub}`, { method: 'DELETE' }); toast('Deleted.'); loadCategories(); }
+        catch (e) { toast(e.message, true); }
+      });
+    });
+    block.querySelector('[data-add-sub]').addEventListener('click', async () => {
+      const label = block.querySelector('.sub-label').value.trim();
+      const slug = block.querySelector('.sub-slug').value.trim() || label.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      if (!label) { toast('Enter a subcategory label.', true); return; }
+      try { await api(`/api/categories/${cat.id}/subcategories`, { method: 'POST', body: { label, slug } }); toast('Added.'); loadCategories(); }
+      catch (e) { toast(e.message, true); }
+    });
+    listEl.appendChild(block);
+  });
+}
+
+document.getElementById('addCatBtn').addEventListener('click', async () => {
+  const key = document.getElementById('c_key').value.trim();
+  const slug = document.getElementById('c_slug').value.trim();
+  const label = document.getElementById('c_label').value.trim();
+  const type = document.getElementById('c_type').value;
+  const blurb = document.getElementById('c_blurb').value.trim();
+  if (!key || !slug || !label) { toast('Key, slug, and label are required.', true); return; }
+  try {
+    await api('/api/categories', { method: 'POST', body: { key, slug, label, type, blurb } });
+    toast('Category created.');
+    ['c_key', 'c_slug', 'c_label', 'c_blurb'].forEach(id => document.getElementById(id).value = '');
+    loadCategories();
+  } catch (e) { toast(e.message, true); }
+});
+
+(async function () {
+  await requireAdminSession();
+  document.getElementById('logoutBtn').addEventListener('click', async () => {
+    await api('/api/auth/logout', { method: 'POST' });
+    window.location.href = 'index.html';
+  });
+  try { await loadCategories(); } catch (e) { toast(e.message, true); }
+})();
+</script>
+</body>
+</html>

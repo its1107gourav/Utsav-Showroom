@@ -1,0 +1,331 @@
+// ============================================================
+// Utsav Showroom — Prisma schema
+// PostgreSQL. Run `npx prisma migrate dev` after setting DATABASE_URL.
+// ============================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum PostType {
+  PRODUCT
+  COLLECTION
+  EDITORIAL
+  LOOK
+  CUSTOM
+}
+
+// Real customer accounts for the "User Login" system — separate from
+// Admin (now labeled "Owner" on the frontend, unchanged below). Both
+// live in the same Postgres database, in separate tables, so there is
+// still exactly one database for the whole project.
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  passwordHash  String
+  age           Int?
+  dateOfBirth   DateTime?
+  profileImage  String?   // Cloudinary URL, reusing the existing Cloudinary account
+  role          String    @default("user") // "owner" role lives in the separate Admin model above
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Admin {
+  id             String   @id @default(cuid())
+  email          String   @unique
+  passwordHash   String?  // null until the owner completes password setup after their first OTP verification
+  name           String?
+  sessionVersion Int      @default(0) // bumped on every login; invalidates any older token elsewhere
+  createdAt      DateTime @default(now())
+  lastLoginAt    DateTime?
+  isRoot         Boolean  @default(false) // the very first owner ever created — only they can change the owner slot limit
+
+  // Dual-OTP owner registration (sidebar "Owner Login" -> first-time
+  // setup only). Once a phone number is verified once, it's locked to
+  // this owner and can't be silently replaced — change it from
+  // Inventory Management -> Manage Owners. After passwordHash is set,
+  // this owner logs in with phone + email + password instead of OTP.
+  phone            String?  @unique
+  phoneVerifiedAt  DateTime?
+}
+
+// Singleton row controlling how many owner accounts may exist/complete
+// setup at once. Only the root owner (Admin.isRoot = true) may change
+// this, and only after re-confirming their own password.
+model OwnerSettings {
+  id            String @id @default("singleton")
+  maxOwnerSlots Int    @default(1)
+}
+
+// Short "Book a Slot" appointment request from the Contact page's three
+// premium sections (Wedding Rental / Beauty Parlour / Beauty Classes).
+// Deliberately separate from Order: this is a quick enquiry, not a paid
+// rental transaction, and needs no size/dates/payment.
+model ServiceBooking {
+  id            String    @id @default(cuid())
+  section       String    // "Wedding Rental" | "Beauty Parlour" | "Beauty Classes"
+  name          String
+  phone         String
+  service       String?
+  preferredDate DateTime?
+  preferredTime String?
+  note          String?
+  status        String    @default("new") // new | contacted | done
+  createdAt     DateTime  @default(now())
+}
+
+// Short-lived OTP challenge for the dual (phone + email) admin login flow.
+// One row per login attempt; both codes must be verified before a session
+// is issued. Never exposes codes to the client — only verified booleans.
+model AdminOtpChallenge {
+  id            String   @id @default(cuid())
+  email         String
+  phone         String
+  emailCodeHash String
+  phoneCodeHash String
+  emailVerified Boolean  @default(false)
+  phoneVerified Boolean  @default(false)
+  attempts      Int      @default(0)
+  expiresAt     DateTime
+  createdAt     DateTime @default(now())
+}
+
+model Category {
+  id            String        @id @default(cuid())
+  key           String        @unique // e.g. BRIDAL_WEAR — matches legacy CATALOG_DATA key
+  slug          String        @unique
+  label         String
+  blurb         String?
+  type          String        @default("rental") // "rental" | "service"
+  sortOrder     Int           @default(0)
+  subcategories Subcategory[]
+  posts         Post[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+model Subcategory {
+  id         String   @id @default(cuid())
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  slug       String
+  label      String
+  sortOrder  Int      @default(0)
+  posts      Post[]
+  createdAt  DateTime @default(now())
+
+  @@unique([categoryId, slug])
+}
+
+model Post {
+  id             String       @id @default(cuid())
+  title          String
+  slug           String       @unique
+  type           PostType     @default(PRODUCT)
+  status         PostStatus   @default(DRAFT)
+  featured       Boolean      @default(false)
+
+  shortDescription String?
+  fullDescription  String?
+
+  categoryId     String?
+  category       Category?    @relation(fields: [categoryId], references: [id])
+  subcategoryId  String?
+  subcategory    Subcategory? @relation(fields: [subcategoryId], references: [id])
+
+  // Product-info fields (optional depending on template)
+  price          Float?
+  unit           String?      // e.g. "/ 3 days"
+  sku            String?      @unique
+  materials      String?
+  size           String?
+  dimensions     String?
+  availability   String?
+  brand          String?
+
+  coverImageId   String?      @unique
+  coverImage     Image?       @relation("CoverImage", fields: [coverImageId], references: [id])
+
+  images         Image[]      @relation("PostImages")
+  sections       Section[]
+  features       Feature[]
+  tags           Tag[]        @relation("PostTags")
+  inventory      InventoryItem?
+  orders         Order[]
+  bookingDates   BookingDate[]
+
+  legacyImagePath String?     // set during migration from catalog-data.js, points at /assets/...
+
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  publishedAt    DateTime?
+}
+
+model Section {
+  id          String       @id @default(cuid())
+  postId      String
+  post        Post         @relation(fields: [postId], references: [id], onDelete: Cascade)
+  title       String
+  content     String?
+  sortOrder   Int          @default(0)
+  visible     Boolean      @default(true)
+  subsections Subsection[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model Subsection {
+  id        String   @id @default(cuid())
+  sectionId String
+  section   Section  @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  title     String
+  content   String?
+  sortOrder Int      @default(0)
+  visible   Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Feature {
+  id          String   @id @default(cuid())
+  postId      String
+  post        Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  title       String
+  description String?
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+}
+
+model Image {
+  id           String   @id @default(cuid())
+  url          String
+  publicId     String?  // Cloudinary public_id, needed to delete/replace
+  alt          String?
+  width        Int?
+  height       Int?
+  sortOrder    Int      @default(0)
+
+  postId       String?
+  post         Post?    @relation("PostImages", fields: [postId], references: [id], onDelete: Cascade)
+
+  coverOfPost  Post?    @relation("CoverImage")
+
+  createdAt    DateTime @default(now())
+}
+
+model Tag {
+  id    String @id @default(cuid())
+  label String @unique
+  posts Post[] @relation("PostTags")
+}
+
+// Owner-facing inventory / stock tracking for each product post.
+// For a rental business "stock" = number of physical units owned;
+// "reserved" = units currently out on rent / booked.
+model InventoryItem {
+  id                String   @id @default(cuid())
+  postId            String   @unique
+  post              Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  sku               String?  @unique
+  totalUnits        Int      @default(1)
+  reservedUnits     Int      @default(0)   // currently rented out / booked
+  damagedUnits      Int      @default(0)   // in cleaning/repair, not rentable
+  lowStockThreshold Int      @default(1)
+  location          String?  // warehouse/rack location, optional
+  costPrice         Float?   // owner-only cost basis, never shown publicly
+  notes             String?
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+enum OrderStatus {
+  PENDING_PAYMENT
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+enum PaymentMethod {
+  UPI
+  CARD
+  NETBANKING
+  COD
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  COD_PENDING
+}
+
+// A customer identified by phone/email — no password; My Orders is looked
+// up by phone number (matches the "no WhatsApp, real orders" flow in the spec).
+model Customer {
+  id        String   @id @default(cuid())
+  name      String
+  phone     String   @unique
+  email     String?
+  createdAt DateTime @default(now())
+  orders    Order[]
+}
+
+// One rental booking window for one product. Used both to record a
+// confirmed order's dates AND to block that date range from being booked
+// again by someone else (see /api/availability).
+model BookingDate {
+  id          String   @id @default(cuid())
+  postId      String
+  post        Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  orderId     String?
+  order       Order?   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  startDate   DateTime
+  endDate     DateTime
+  status      String   @default("held") // held (mid-checkout) | booked (confirmed) | released
+  createdAt   DateTime @default(now())
+}
+
+model Order {
+  id             String        @id @default(cuid())
+  customerId     String
+  customer       Customer      @relation(fields: [customerId], references: [id])
+
+  postId         String
+  post           Post          @relation(fields: [postId], references: [id])
+  productName    String        // snapshot, in case the post changes later
+  productImage   String?
+
+  size           String?
+  startDate      DateTime
+  endDate        DateTime
+  days           Int
+  purpose        String?
+
+  pricePerDay    Float
+  totalAmount    Float
+
+  paymentMethod  PaymentMethod
+  paymentStatus  PaymentStatus @default(PENDING)
+  paymentRef     String?       // gateway transaction id, once real payment is wired in
+
+  status         OrderStatus   @default(PENDING_PAYMENT)
+  bookings       BookingDate[]
+
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+}

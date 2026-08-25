@@ -1,0 +1,770 @@
+<!doctype html>
+<!-- =========================================================================
+     UTSAV SHOWROOM — HAIR STYLING CATEGORY PAGE  (pages/hair-styling.html)
+     =========================================================================
+     Auto-generated card grid: one .card-full per real image in
+     assets/HAIR_STYLING/ (70 total). Each card only carries
+     data-image + data-category in its HTML — js/app.js (loaded via
+     ../js/app.js below) computes and fills in the name, star rating,
+     price, and Rent/Book button text for every card on page load
+     (see deriveItem() in app.js), and wires up like, share, and the
+     click-to-fullscreen modal. Box size for this category: Large boxes
+     ("card-max" on the .grid below — bridal-jewellery.html uses
+     card-min, hair-styling.html uses card-max; every other category is
+     bounded between those two).
+     ========================================================================= -->
+<html lang="en" data-theme="day">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Hair Styling — Utsav Showroom</title>
+<meta name="description" content="Hair Styling — 70 real looks at Utsav Showroom." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/sections.css">
+<link rel="stylesheet" href="../css/enhance.css">
+</head>
+<body data-root="sub">
+
+<nav class="nav">
+  <div class="wrap nav-row">
+    <a href="../index.html" class="wordmark">Utsav <em>Showroom</em></a>
+    <div class="nav-links">
+      <a href="../collections.html">Collections</a>
+      <a href="../spotlight.html">Spotlight</a>
+      <a href="../studio.html">Parlour</a>
+      <a href="../classes.html">Classes</a>
+      <a href="garba-dresses.html">Garba Dresses</a>
+      <a href="../contact.html">Contact</a>
+    </div>
+    <div class="nav-right">
+      <div class="toggle" id="themeToggle">
+        <span id="toggleLabel">Day</span>
+        <span class="toggle-track"><span class="toggle-thumb"></span></span>
+      </div>
+      <a href="../contact.html" class="nav-cta">Book a Slot</a>
+    </div>
+  </div>
+</nav>
+
+<section class="page-hero">
+  <div class="wrap">
+    <p class="crumb"><a href="../index.html">Home</a> / <a href="../collections.html">Collections</a> / Hair Styling</p>
+    <h1>Hair Styling</h1>
+    <p>Bridal updos, blowouts, and styling — booked as an in-studio appointment.</p>
+    <div class="tags">
+      <span class="tag">70 Looks</span>
+      <span class="tag">Studio Appointment</span>
+      <span class="tag">Large boxes</span>
+    </div>
+  </div>
+</section>
+
+<section class="page-body">
+  <div class="wrap">
+    <div class="grid card-max reveal">
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS1.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS1.jpg" alt="HS1"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS2.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS2.jpg" alt="HS2"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS3.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS3.jpg" alt="HS3"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS4.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS4.jpg" alt="HS4"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS5.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS5.jpg" alt="HS5"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS6.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS6.jpg" alt="HS6"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS7.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS7.jpg" alt="HS7"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS8.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS8.jpg" alt="HS8"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS9.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS9.jpg" alt="HS9"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS10.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS10.jpg" alt="HS10"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS11.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS11.jpg" alt="HS11"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS12.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS12.jpg" alt="HS12"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS13.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS13.jpg" alt="HS13"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS14.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS14.jpg" alt="HS14"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS15.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS15.jpg" alt="HS15"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS16.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS16.jpg" alt="HS16"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS17.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS17.jpg" alt="HS17"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS18.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS18.jpg" alt="HS18"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS19.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS19.jpg" alt="HS19"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS20.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS20.jpg" alt="HS20"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS21.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS21.jpg" alt="HS21"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS22.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS22.jpg" alt="HS22"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS23.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS23.jpg" alt="HS23"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS24.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS24.jpg" alt="HS24"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS25.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS25.jpg" alt="HS25"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS26.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS26.jpg" alt="HS26"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS27.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS27.jpg" alt="HS27"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS28.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS28.jpg" alt="HS28"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS29.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS29.jpg" alt="HS29"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS30.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS30.jpg" alt="HS30"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS31.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS31.jpg" alt="HS31"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS32.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS32.jpg" alt="HS32"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS33.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS33.jpg" alt="HS33"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS34.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS34.jpg" alt="HS34"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS35.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS35.jpg" alt="HS35"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS36.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS36.jpg" alt="HS36"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS37.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS37.jpg" alt="HS37"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS38.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS38.jpg" alt="HS38"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS39.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS39.jpg" alt="HS39"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS40.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS40.jpg" alt="HS40"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS41.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS41.jpg" alt="HS41"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS42.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS42.jpg" alt="HS42"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS43.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS43.jpg" alt="HS43"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS44.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS44.jpg" alt="HS44"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS45.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS45.jpg" alt="HS45"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS46.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS46.jpg" alt="HS46"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS47.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS47.jpg" alt="HS47"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS48.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS48.jpg" alt="HS48"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS49.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS49.jpg" alt="HS49"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS50.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS50.jpg" alt="HS50"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS51.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS51.jpg" alt="HS51"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS52.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS52.jpg" alt="HS52"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS53.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS53.jpg" alt="HS53"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS54.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS54.jpg" alt="HS54"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS55.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS55.jpg" alt="HS55"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS56.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS56.jpg" alt="HS56"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS57.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS57.jpg" alt="HS57"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS58.png" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS58.png" alt="HS58"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS59.png" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS59.png" alt="HS59"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS60.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS60.jpg" alt="HS60"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS61.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS61.jpg" alt="HS61"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS62.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS62.jpg" alt="HS62"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS63.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS63.jpg" alt="HS63"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS64.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS64.jpg" alt="HS64"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS65.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS65.jpg" alt="HS65"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS66.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS66.jpg" alt="HS66"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS67.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS67.jpg" alt="HS67"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS68.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS68.jpg" alt="HS68"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS69.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS69.jpg" alt="HS69"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+      <div class="card card-full" data-image="../assets/HAIR_STYLING/HS70.jpg" data-category="hair-styling">
+        <div class="card-photo"><img loading="lazy" src="../assets/HAIR_STYLING/HS70.jpg" alt="HS70"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="cta-band">
+  <div class="wrap">
+    <p class="eyebrow" style="justify-content:center; color:rgba(255,255,255,0.75);">Found The One?</p>
+    <h2 style="margin-top:18px;">Book it.</h2>
+    <p>Click any photo above for the full-screen view, then use the button there to book — or reach out directly.</p>
+    <a href="../contact.html" class="btn btn-ivory">Contact Utsav Showroom →</a>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <h3>UTSAV SHOWROOM</h3>
+        <p>A curated world of wedding style, beauty and celebration.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Parlour</h4>
+        <a href="hair-styling.html">Hair</a>
+        <a href="makeup-looks.html">Makeup</a>
+        <a href="nail-art.html">Nail Art</a>
+        <a href="face-care.html">Skin &amp; Face</a>
+      </div>
+      <div class="foot-col">
+        <h4>Site</h4>
+        <a href="../collections.html">Collections</a>
+        <a href="../spotlight.html">Spotlight</a>
+        <a href="../classes.html">Classes</a>
+      </div>
+      <div class="foot-col">
+        <h4>Contact</h4>
+        <button type="button" class="footer-link-btn" data-book="Wedding Rental">Book a Slot</button>
+        <a href="tel:+919575929021">Call Us</a>
+        <a href="../contact.html">Find the Showroom</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Utsav Showroom. All looks archived in-house.</span>
+      <span>70 looks in this collection.</span>
+    </div>
+  </div>
+</footer>
+
+<div class="modal-overlay" id="detailModal">
+  <div class="modal-box">
+    <button type="button" class="modal-close" aria-label="Close">✕</button>
+    <div class="modal-photo"><img src="" alt=""></div>
+    <div class="modal-info">
+      <p class="eyebrow modal-eyebrow"></p>
+      <h2 class="modal-name"></h2>
+      <div class="modal-rating"></div>
+      <div class="modal-price"></div>
+      <p class="modal-desc"></p>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-solid modal-cta"></button>
+        <button type="button" class="modal-like" aria-label="Like">♡</button>
+        <button type="button" class="modal-share" aria-label="Share">⤴</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="../js/app.js"></script>
+<script src="../js/sidebar.js"></script>
+<script src="../js/booking.js"></script>
+<script src="../js/api-config.js"></script>
+<script src="../js/api-integration.js"></script>
+</body>
+</html>

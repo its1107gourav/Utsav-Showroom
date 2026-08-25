@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Owner Login — Utsav Showroom</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+<div class="mu-login-shell">
+  <div class="mu-login-card">
+    <h1>Utsav Showroom — Owner</h1>
+    <form id="loginForm">
+      <div class="mu-form-row">
+        <label for="email">Email</label>
+        <input type="email" id="email" required autocomplete="username">
+      </div>
+      <div class="mu-form-row">
+        <label for="phone">Contact Number</label>
+        <input type="tel" id="phone" required autocomplete="tel">
+      </div>
+      <div class="mu-form-row">
+        <label for="password">Password</label>
+        <input type="password" id="password" required autocomplete="current-password">
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%" id="loginBtn">Log in</button>
+      <p class="hint" style="margin-top:10px;">Only one owner session is active at a time — logging in here will sign out any other session automatically. First time? Use Owner Login from the public site's menu instead — this page is for returning owners only.</p>
+      <p id="loginError" style="color:#c0392b;font-size:13px;margin-top:10px;display:none;"></p>
+    </form>
+  </div>
+</div>
+<script src="js/admin-api.js"></script>
+<script>
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = document.getElementById('loginBtn');
+  const errEl = document.getElementById('loginError');
+  errEl.style.display = 'none';
+  btn.disabled = true; btn.textContent = 'Logging in…';
+  try {
+    await api('/api/auth/login', {
+      method: 'POST',
+      body: {
+        email: document.getElementById('email').value.trim(),
+        phone: document.getElementById('phone').value.trim(),
+        password: document.getElementById('password').value,
+      },
+    });
+    window.location.href = 'dashboard.html';
+  } catch (err) {
+    errEl.textContent = err.message || 'Login failed.';
+    errEl.style.display = 'block';
+    btn.disabled = false; btn.textContent = 'Log in';
+  }
+});
+</script>
+</body>
+</html>

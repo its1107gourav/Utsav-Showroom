@@ -1,0 +1,408 @@
+/* ============================================================
+   style.css — Utsav Showroom
+   ------------------------------------------------------------
+   HOW THIS FILE IS ORGANISED (read top to bottom):
+     1. THEME TOKENS      — every colour lives here as a CSS
+                             variable, once each for "day" and
+                             "night" mode. Nothing below this
+                             block ever hard-codes a colour —
+                             it all reads var(--something), which
+                             is the whole trick behind the Day/
+                             Night toggle: flip one attribute on
+                             <html> and every colour on the page
+                             updates itself.
+     2. BASE / TYPOGRAPHY  — resets, fonts, generic helpers.
+     3. NAV                — sticky top bar + the toggle switch.
+     4. HERO                — homepage collage banner.
+     5. CHIPS / SECTION HEADS — small reusable bits.
+     6. BENTO COLLECTIONS   — the homepage's small preview tiles
+                              (deliberately SMALL — full detail
+                              lives one click away, on the
+                              category subpage).
+     7. SPOTLIGHT STRIPS    — homepage teaser rows for our three
+                              flagship categories.
+     8. ACADEMY             — the "learn beauty parlour with us"
+                              section.
+     9. SERVICE LEDGER      — the four studio-service summary.
+    10. CTA BAND / FOOTER
+    11. BOX TIERS           — used ONLY on category.html. Five
+                              fixed card sizes (min → max). Every
+                              category is assigned one tier in
+                              catalog-data.js so the box size on
+                              a subpage always reflects how much
+                              we want that category to stand out
+                              (Bridal Jewellery = min/reference
+                              size, Hair Styling = max size,
+                              because the studio side of the
+                              business — not the rental side —
+                              is what Utsav Showroom is known for).
+    12. ITEM CARD           — the name / price / rating / button
+                              layout shared by every box tier.
+    13. MODAL / LIGHTBOX    — the full-screen detail view that
+                              opens when any item card is clicked.
+   ============================================================ */
+
+/* ============================================================
+   1. THEME TOKENS
+   ============================================================ */
+:root{
+  --max: 1280px;
+  --r-sm: 4px;
+  --r-md: 10px;
+  --r-lg: 16px;
+  --gold: #D4AF37;
+}
+
+/* DAY mode — baby pink / lavender / dark pink / purple, on a
+   soft ivory-pink page background. This is the default theme. */
+html[data-theme="day"]{
+  --bg: #FCF3F7;
+  --bg-grad: linear-gradient(160deg, #FBE9F1 0%, #F3E6F8 45%, #ECE3F7 100%);
+  --surface: #FFFFFF;
+  --surface-soft: #FBF0F5;
+  --text: #34172E;
+  --text-soft: #7C5A72;
+  --pink-baby: #F7CFE0;
+  --pink-dark: #C21E6D;
+  --lavender: #C6AEEA;
+  --purple: #6C3AA8;
+  --line: rgba(52,23,46,0.12);
+  --nav-bg: rgba(252,243,247,0.78);
+  --accent-strong: var(--pink-dark);
+  --accent-grad: linear-gradient(90deg, var(--pink-dark), var(--purple));
+}
+
+/* NIGHT mode — black / maroon / gold, for reception-night mood. */
+html[data-theme="night"]{
+  --bg: #0C0709;
+  --bg-grad: linear-gradient(160deg, #150409 0%, #1C0810 45%, #100608 100%);
+  --surface: #170A0F;
+  --surface-soft: #1E0D14;
+  --text: #F4E7DD;
+  --text-soft: #C6A2A9;
+  --pink-baby: #6B0F2B;
+  --pink-dark: #8C1C3B;
+  --lavender: #4A1420;
+  --purple: #3A0F16;
+  --line: rgba(244,231,221,0.14);
+  --nav-bg: rgba(12,7,9,0.78);
+  --accent-strong: var(--gold);
+  --accent-grad: linear-gradient(90deg, var(--gold), #8C1C3B);
+}
+
+/* ============================================================
+   2. BASE / TYPOGRAPHY
+   ============================================================ */
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Manrope', sans-serif;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+  transition:background .5s ease, color .5s ease;
+}
+h1,h2,h3{font-family:'Bodoni Moda', serif; margin:0; letter-spacing:-0.01em;}
+a{color:inherit; text-decoration:none;}
+img{display:block; max-width:100%;}
+button{font:inherit; cursor:pointer;}
+.mono{font-family:'IBM Plex Mono', monospace;}
+.eyebrow{
+  font-family:'IBM Plex Mono', monospace; font-size:10.5px; letter-spacing:0.22em;
+  text-transform:uppercase; color:var(--accent-strong); display:flex; align-items:center; gap:10px;
+}
+.eyebrow::before{content:''; width:22px; height:1px; background:currentColor; display:inline-block;}
+.wrap{max-width:var(--max); margin:0 auto; padding:0 30px;}
+@media(max-width:720px){ .wrap{padding:0 20px;} }
+
+/* fade-up animation used on most sections; toggled by main.js
+   via IntersectionObserver adding the "in" class when scrolled into view */
+.reveal{opacity:0; transform:translateY(24px); transition:opacity .8s ease, transform .8s ease;}
+.reveal.in{opacity:1; transform:none;}
+
+/* ============================================================
+   3. NAV
+   ============================================================ */
+.nav{position:sticky; top:0; z-index:50; background:var(--nav-bg); backdrop-filter:blur(12px); border-bottom:1px solid var(--line); transition:background .5s ease, border-color .5s ease;}
+.nav-row{display:flex; align-items:center; justify-content:space-between; height:76px;}
+.wordmark{font-family:'Bodoni Moda', serif; font-weight:600; font-size:20px;}
+.wordmark em{font-style:italic; font-weight:400; background:var(--accent-grad); -webkit-background-clip:text; background-clip:text; color:transparent;}
+.nav-links{display:flex; gap:30px; font-size:13px;}
+.nav-links a{color:var(--text-soft);}
+.nav-links a:hover{color:var(--text);}
+.nav-right{display:flex; align-items:center; gap:18px;}
+
+/* Day/Night toggle switch. .toggle-thumb slides via CSS transform;
+   main.js just flips the data-theme attribute + this class. */
+.toggle{display:flex; align-items:center; gap:8px; cursor:pointer; font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-soft); user-select:none;}
+.toggle-track{width:44px; height:23px; border-radius:20px; border:1px solid var(--line); background:var(--surface-soft); position:relative;}
+.toggle-thumb{position:absolute; top:2px; left:2px; width:17px; height:17px; border-radius:50%; background:var(--accent-grad); transition:transform .4s cubic-bezier(.6,.2,.2,1);}
+html[data-theme="night"] .toggle-thumb{ transform:translateX(21px); }
+
+.nav-cta{font-family:'IBM Plex Mono', monospace; font-size:10.5px; letter-spacing:0.06em; background:var(--accent-grad); color:#fff; padding:10px 18px; text-transform:uppercase; border-radius:2px; transition:filter .25s ease, transform .25s ease;}
+html[data-theme="night"] .nav-cta{color:#170A0F;}
+.nav-cta:hover{filter:brightness(1.1); transform:translateY(-1px);}
+@media(max-width:900px){ .nav-links{display:none;} }
+
+/* ============================================================
+   4. HERO
+   ============================================================ */
+.hero{position:relative; padding:60px 0 36px; background:var(--bg-grad); overflow:hidden;}
+.hero-inner{display:grid; grid-template-columns:1fr 1fr; align-items:center; gap:20px; min-height:68vh;}
+.hero-copy h1{font-size:clamp(34px,4.6vw,60px); line-height:1.03; font-weight:600; max-width:12ch;}
+.hero-copy h1 i{font-style:italic; font-weight:400; background:var(--accent-grad); -webkit-background-clip:text; background-clip:text; color:transparent;}
+.hero-sub{font-size:15px; line-height:1.7; color:var(--text-soft); max-width:42ch; margin:20px 0 28px;}
+.hero-cta-row{display:flex; gap:14px; flex-wrap:wrap;}
+.btn{font-family:'IBM Plex Mono', monospace; font-size:11.5px; letter-spacing:0.05em; text-transform:uppercase; padding:14px 22px; display:inline-flex; align-items:center; gap:10px; border-radius:2px; transition:all .25s ease; border:none;}
+.btn-solid{background:var(--accent-grad); color:#fff;}
+html[data-theme="night"] .btn-solid{color:#170A0F;}
+.btn-solid:hover{filter:brightness(1.12); transform:translateY(-2px);}
+.btn-line{border:1px solid var(--text); color:var(--text); background:transparent;}
+.btn-line:hover{background:var(--text); color:var(--bg); transform:translateY(-2px);}
+.hero-stat{display:flex; gap:14px; align-items:baseline; margin-top:30px; border-top:1px solid var(--line); padding-top:18px; max-width:400px;}
+.hero-stat .num{font-family:'Bodoni Moda', serif; font-weight:700; font-size:42px; background:var(--accent-grad); -webkit-background-clip:text; background-clip:text; color:transparent;}
+.hero-stat .lbl{font-size:10.5px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-soft); font-family:'IBM Plex Mono', monospace; line-height:1.5;}
+
+.collage{position:relative; height:460px;}
+.collage img{position:absolute; object-fit:cover; border-radius:var(--r-md); box-shadow:0 20px 50px rgba(52,23,46,0.22);}
+html[data-theme="night"] .collage img{box-shadow:0 20px 60px rgba(0,0,0,0.6);}
+.c1{width:47%; height:64%; top:0; left:8%; transform:rotate(-4deg); z-index:2;}
+.c2{width:40%; height:46%; top:6%; right:0; transform:rotate(5deg); z-index:1;}
+.c3{width:36%; height:40%; bottom:0; left:0; transform:rotate(6deg); z-index:3;}
+.c4{width:34%; height:34%; bottom:4%; right:6%; transform:rotate(-6deg); z-index:2;}
+.collage-badge{position:absolute; z-index:4; bottom:16%; left:38%; background:var(--surface); color:var(--text); border-radius:50%; width:94px; height:94px; display:flex; flex-direction:column; align-items:center; justify-content:center; box-shadow:0 12px 30px rgba(52,23,46,0.2); text-align:center;}
+.collage-badge b{font-family:'Bodoni Moda',serif; font-size:18px;}
+.collage-badge span{font-family:'IBM Plex Mono',monospace; font-size:7.5px; letter-spacing:0.05em; text-transform:uppercase; color:var(--text-soft);}
+@media(max-width:900px){
+  .hero-inner{grid-template-columns:1fr; min-height:auto;}
+  .collage{height:380px; margin-top:32px;}
+}
+
+/* ============================================================
+   5. CHIPS / SECTION HEADS
+   ============================================================ */
+.chips-band{background:var(--surface); border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:20px 0; overflow-x:auto;}
+.chips{display:flex; gap:12px; width:max-content; padding:0 2px;}
+.chip{font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:0.05em; text-transform:uppercase; padding:9px 16px; border:1px solid var(--line); border-radius:30px; color:var(--text-soft); transition:all .25s ease; white-space:nowrap;}
+.chip:hover{border-color:var(--accent-strong); color:var(--accent-strong);}
+
+.sec{padding:90px 0;}
+.sec-head{display:flex; justify-content:space-between; align-items:flex-end; gap:30px; margin-bottom:44px; flex-wrap:wrap;}
+.sec-head h2{font-size:clamp(28px,3vw,42px); font-weight:600; max-width:15ch;}
+.sec-head p{max-width:36ch; font-size:14px; line-height:1.65; color:var(--text-soft);}
+
+/* ============================================================
+   6. BENTO COLLECTIONS (homepage preview tiles — kept SMALL;
+   these are just a taste of each category, the full grid with
+   price/rating/booking lives on category.html)
+   ============================================================ */
+.bento{display:grid; grid-template-columns:repeat(8, 1fr); gap:10px;}
+.tile{position:relative; overflow:hidden; border-radius:var(--r-sm); background:var(--surface-soft); display:block;}
+.tile img{width:100%; height:100%; object-fit:cover; transition:transform .7s ease;}
+.tile:hover img{transform:scale(1.08);}
+/* only two sizes now, both small — "lg" is a modest 2-col square,
+   "sm" is a single column square. Nothing homepage-side is a big
+   showcase block any more; that job moved to the subpages. */
+.tile-lg{grid-column:span 2; aspect-ratio:1/1;}
+.tile-sm{grid-column:span 1; aspect-ratio:1/1;}
+.tile-overlay{position:absolute; inset:0; background:linear-gradient(0deg, rgba(20,7,15,0.82) 0%, rgba(20,7,15,0.05) 60%); display:flex; flex-direction:column; justify-content:flex-end; padding:10px;}
+.tile-cat{color:#F4E7EF; font-family:'IBM Plex Mono', monospace; font-size:7.5px; letter-spacing:0.08em; text-transform:uppercase; opacity:0.75;}
+.tile-name{color:#fff; font-family:'Bodoni Moda', serif; font-size:clamp(11px,1vw,14px); font-weight:600; line-height:1.15;}
+.tile-count{color:#F4E7EF; font-family:'IBM Plex Mono', monospace; font-size:8.5px; margin-top:2px; opacity:0.85;}
+@media(max-width:760px){
+  .bento{grid-template-columns:repeat(4,1fr);}
+  .tile-lg{grid-column:span 2;}
+}
+
+/* ============================================================
+   7. SPOTLIGHT STRIPS (homepage teaser rows)
+   ============================================================ */
+.spotlight{padding:60px 0; border-top:1px solid var(--line);}
+.spotlight-head{display:flex; align-items:baseline; gap:18px; margin-bottom:24px; flex-wrap:wrap;}
+.spotlight-head h3{font-size:clamp(22px,2.4vw,30px); font-weight:600;}
+.spotlight-head .count{font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--text-soft);}
+.spot-bar{width:44px; height:3px; border-radius:2px; margin-bottom:14px;}
+.bar-pink{background:linear-gradient(90deg,var(--pink-dark),var(--pink-baby));}
+.bar-purple{background:linear-gradient(90deg,var(--purple),var(--lavender));}
+.bar-gold{background:linear-gradient(90deg,var(--gold),var(--pink-dark));}
+.spot-row{display:flex; gap:14px; overflow-x:auto; scroll-snap-type:x mandatory; padding-bottom:10px; scrollbar-width:none;}
+.spot-row::-webkit-scrollbar{display:none;}
+.spot-card{flex:0 0 auto; width:190px; height:250px; border-radius:var(--r-sm); overflow:hidden; scroll-snap-align:start; background:var(--surface-soft);}
+.spot-card img{width:100%; height:100%; object-fit:cover; transition:transform .6s ease;}
+.spot-card:hover img{transform:scale(1.07);}
+
+/* ============================================================
+   8. ACADEMY — beauty-parlour classes, taught by the same team
+   ============================================================ */
+.academy{padding:100px 0; background:var(--surface); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+.academy-grid{display:grid; grid-template-columns:1fr 1fr; gap:50px; align-items:center;}
+.academy-copy p.eyebrow{margin-bottom:16px;}
+.academy-copy h2{font-size:clamp(28px,3.2vw,42px); font-weight:600; max-width:14ch; margin-bottom:18px;}
+.academy-copy > p{font-size:14.5px; line-height:1.75; color:var(--text-soft); max-width:44ch; margin-bottom:26px;}
+.academy-courses{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:30px;}
+.course-chip{border:1px solid var(--line); border-radius:var(--r-sm); padding:14px 16px;}
+.course-chip b{display:block; font-family:'Bodoni Moda', serif; font-size:16px; margin-bottom:4px;}
+.course-chip span{font-size:12px; color:var(--text-soft);}
+.academy-media{position:relative; border-radius:var(--r-md); overflow:hidden; aspect-ratio:4/5;}
+.academy-media img{width:100%; height:100%; object-fit:cover;}
+.academy-media .badge{position:absolute; top:16px; left:16px; background:var(--accent-grad); color:#fff; font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:0.06em; text-transform:uppercase; padding:8px 14px; border-radius:20px;}
+html[data-theme="night"] .academy-media .badge{color:#170A0F;}
+@media(max-width:900px){ .academy-grid{grid-template-columns:1fr;} .academy-courses{grid-template-columns:1fr 1fr;} }
+
+/* ============================================================
+   9. SERVICE LEDGER
+   ============================================================ */
+.ledger-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:var(--r-md); overflow:hidden;}
+.ledger-cell{background:var(--surface); padding:32px 24px;}
+.ledger-num{font-family:'IBM Plex Mono',monospace; color:var(--accent-strong); font-size:11px; margin-bottom:12px; display:block;}
+.ledger-cell h3{font-size:20px; font-weight:600; margin-bottom:10px;}
+.ledger-cell p{font-size:13px; line-height:1.65; color:var(--text-soft);}
+@media(max-width:900px){ .ledger-grid{grid-template-columns:repeat(2,1fr);} }
+@media(max-width:560px){ .ledger-grid{grid-template-columns:1fr;} }
+
+/* ============================================================
+   10. CTA BAND / FOOTER
+   ============================================================ */
+.cta-band{background:linear-gradient(120deg, var(--purple), var(--pink-dark)); color:#fff; padding:90px 0; text-align:center;}
+html[data-theme="night"] .cta-band{background:linear-gradient(120deg, #170A0F, #4A1420); color:var(--gold);}
+.cta-band h2{font-size:clamp(30px,3.8vw,50px); font-weight:600; margin-bottom:16px;}
+.cta-band p{opacity:0.85; max-width:46ch; margin:0 auto 28px; font-size:14px; line-height:1.7;}
+.btn-ivory{background:#fff; color:var(--purple); border:none;}
+html[data-theme="night"] .btn-ivory{background:var(--gold); color:#170A0F;}
+.btn-ivory:hover{transform:translateY(-2px); filter:brightness(1.05);}
+
+footer{background:var(--surface); border-top:1px solid var(--line); padding:64px 0 26px;}
+.foot-top{display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:34px; padding-bottom:44px; border-bottom:1px solid var(--line);}
+.foot-brand h3{font-size:22px; margin-bottom:12px;}
+.foot-brand p{font-size:12.5px; line-height:1.7; max-width:32ch; color:var(--text-soft);}
+.foot-col h4{font-family:'IBM Plex Mono', monospace; font-size:10.5px; letter-spacing:0.1em; text-transform:uppercase; color:var(--accent-strong); margin-bottom:14px;}
+.foot-col a{display:block; font-size:12.5px; margin-bottom:9px; color:var(--text-soft);}
+.foot-col a:hover{color:var(--text);}
+.foot-bottom{display:flex; justify-content:space-between; padding-top:20px; font-size:11px; color:var(--text-soft); flex-wrap:wrap; gap:10px;}
+@media(max-width:760px){ .foot-top{grid-template-columns:1fr 1fr; row-gap:30px;} }
+
+/* ============================================================
+   11. BOX TIERS — category.html only.
+   ------------------------------------------------------------
+   Five fixed widths. Every category (see catalog-data.js
+   "boxTier" field) is assigned exactly one of these.
+     min  = 220px  -> Bridal Jewellery. The reference / smallest
+                      size, as requested — every other tier is
+                      measured relative to this one.
+     sm   = 245px  -> Bridal Wear, Groom Wear, Groom Jewellery,
+                      Pagdi & Safa, Juti & Footwear, Couple Sets,
+                      Studio Features. (the rental side)
+     md   = 270px  -> Nail Art, Nail Care.
+     lg   = 295px  -> Makeup Looks, Face Care.
+     max  = 320px  -> Hair Styling. The largest size. Hair
+                      Styling — not the biggest folder by image
+                      count (Bridal Wear has more photos) — gets
+                      the biggest box on purpose: Utsav Showroom is
+                      known first for its beauty studio, so studio
+                      services are sized UP relative to rental
+                      categories, not just sized by photo count.
+   All five tiers share the same 3:4 aspect ratio, so height
+   scales with width automatically — nothing below needs a
+   separate height value per tier.
+   ============================================================ */
+.box-min{ width:220px; }
+.box-sm { width:245px; }
+.box-md { width:270px; }
+.box-lg { width:295px; }
+.box-max{ width:320px; }
+@media(max-width:600px){
+  .box-min,.box-sm,.box-md,.box-lg,.box-max{ width: calc(50vw - 34px); }
+}
+
+/* ============================================================
+   12. ITEM CARD — the actual clickable box: image, name, price,
+   rating, and a Rent Now / Book Appointment button. Used inside
+   .item-grid on category.html; width comes from the box-tier
+   class above, this block only handles height/contents.
+   ============================================================ */
+.item-grid{display:flex; flex-wrap:wrap; gap:22px;}
+.item-card{
+  aspect-ratio: 3 / 4;
+  border-radius:var(--r-md);
+  overflow:hidden;
+  position:relative;
+  background:var(--surface-soft);
+  cursor:pointer;
+  border:1px solid var(--line);
+  transition:transform .3s ease, box-shadow .3s ease;
+}
+.item-card:hover{ transform:translateY(-4px); box-shadow:0 18px 34px rgba(52,23,46,0.18); }
+html[data-theme="night"] .item-card:hover{ box-shadow:0 18px 40px rgba(0,0,0,0.55); }
+.item-card .thumb{position:absolute; inset:0;}
+.item-card .thumb img{width:100%; height:100%; object-fit:cover; transition:transform .6s ease;}
+.item-card:hover .thumb img{transform:scale(1.07);}
+.item-card .fade{position:absolute; inset:0; background:linear-gradient(0deg, rgba(15,6,12,0.92) 0%, rgba(15,6,12,0.15) 55%, rgba(15,6,12,0) 75%);}
+.item-card .info{position:absolute; left:0; right:0; bottom:0; padding:14px; color:#fff;}
+.item-card .name{font-family:'Bodoni Moda', serif; font-weight:600; font-style:italic; font-size:16px; line-height:1.2; margin-bottom:6px;}
+.item-card .meta-row{display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;}
+.item-card .price{font-family:'IBM Plex Mono', monospace; font-size:12.5px; font-weight:500;}
+.item-card .price small{opacity:0.7; font-size:10px;}
+.item-card .rating{font-family:'IBM Plex Mono', monospace; font-size:11px; display:flex; align-items:center; gap:4px; color:var(--gold);}
+.item-card .cta{
+  width:100%; padding:9px; border:none; border-radius:2px;
+  font-family:'IBM Plex Mono', monospace; font-size:10.5px; letter-spacing:0.05em; text-transform:uppercase;
+  background:var(--accent-grad); color:#fff;
+}
+html[data-theme="night"] .item-card .cta{ color:#170A0F; }
+
+/* ============================================================
+   13. MODAL / LIGHTBOX — full-screen detail view on click.
+   Opened/closed by category.js (adds/removes the .open class on
+   #itemModal). Prev/Next lets you flip through the category
+   without closing the modal.
+   ============================================================ */
+.modal-backdrop{
+  position:fixed; inset:0; z-index:100; background:rgba(10,4,8,0.82);
+  display:flex; align-items:center; justify-content:center; padding:30px;
+  opacity:0; pointer-events:none; transition:opacity .3s ease;
+}
+.modal-backdrop.open{ opacity:1; pointer-events:auto; }
+.modal-box{
+  background:var(--surface); border-radius:var(--r-lg); overflow:hidden; max-width:960px; width:100%;
+  max-height:88vh; display:grid; grid-template-columns:1.1fr 1fr;
+  transform:translateY(20px) scale(0.98); transition:transform .35s ease;
+}
+.modal-backdrop.open .modal-box{ transform:none; }
+.modal-media{position:relative; background:#000;}
+.modal-media img{width:100%; height:100%; object-fit:cover;}
+.modal-details{padding:40px 36px; overflow-y:auto; display:flex; flex-direction:column;}
+.modal-details .eyebrow{margin-bottom:14px;}
+.modal-details h3{font-size:clamp(22px,2.6vw,30px); font-style:italic; font-weight:600; margin-bottom:14px;}
+.modal-details .rating-row{display:flex; align-items:center; gap:10px; margin-bottom:20px; font-family:'IBM Plex Mono', monospace; font-size:12.5px; color:var(--text-soft);}
+.modal-details .rating-row .stars{color:var(--gold);}
+.modal-details .price-row{font-family:'Bodoni Moda', serif; font-size:30px; font-weight:600; margin-bottom:6px;}
+.modal-details .price-row small{font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--text-soft); font-weight:400;}
+.modal-details p.desc{font-size:13.5px; line-height:1.75; color:var(--text-soft); margin:14px 0 26px;}
+.modal-details .btn{width:100%; justify-content:center; margin-bottom:12px;}
+.modal-nav{display:flex; gap:10px; margin-top:auto;}
+.modal-nav button{flex:1; border:1px solid var(--line); background:transparent; color:var(--text); padding:12px; border-radius:2px; font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:0.05em; text-transform:uppercase;}
+.modal-nav button:hover{border-color:var(--accent-strong); color:var(--accent-strong);}
+.modal-close{
+  position:absolute; top:18px; right:18px; z-index:2;
+  width:38px; height:38px; border-radius:50%; border:none;
+  background:rgba(255,255,255,0.9); color:#14110D; font-size:18px; line-height:1;
+  display:flex; align-items:center; justify-content:center;
+}
+@media(max-width:760px){
+  .modal-box{grid-template-columns:1fr; max-height:92vh; overflow-y:auto;}
+  .modal-media{aspect-ratio:4/3;}
+}
+
+/* ============================================================
+   CATEGORY PAGE HEADER (category.html only)
+   ============================================================ */
+.cat-hero{padding:60px 0 40px; background:var(--bg-grad); border-bottom:1px solid var(--line);}
+.cat-hero .back-link{font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-soft); display:inline-flex; align-items:center; gap:8px; margin-bottom:20px;}
+.cat-hero .back-link:hover{color:var(--text);}
+.cat-hero h1{font-size:clamp(34px,4.6vw,58px); font-weight:600; font-style:italic;}
+.cat-hero p.blurb{max-width:56ch; font-size:14.5px; line-height:1.7; color:var(--text-soft); margin-top:16px;}
+.cat-hero .cat-meta{display:flex; gap:26px; margin-top:24px; flex-wrap:wrap;}
+.cat-meta .m{font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--text-soft); text-transform:uppercase; letter-spacing:0.04em;}
+.cat-meta .m b{display:block; font-family:'Bodoni Moda', serif; font-size:26px; color:var(--text); font-style:normal; letter-spacing:0; text-transform:none;}

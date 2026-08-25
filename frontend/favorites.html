@@ -1,0 +1,185 @@
+<!doctype html>
+<!-- =========================================================================
+     UTSAV SHOWROOM — FAVORITES PAGE  (favorites.html)
+     =========================================================================
+     A real page (not a floating panel) listing every item currently
+     liked, using the exact same .grid / .card-full card structure as
+     every category subpage — same sizing, same Visit/Rent Now actions,
+     same hydrateCard() logic (window.MU_hydrateCard, from app.js) so
+     there's zero visual drift from the rest of the site.
+
+     Items are shown in the order they were added to favorites.
+     Un-hearting a card here (or anywhere else on the site, then coming
+     back to this page) removes it from this list live — both listen
+     for the same 'utsav-likes-updated' event that setLiked() dispatches.
+     ========================================================================= -->
+<html lang="en" data-theme="day">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Favorites — Utsav Showroom</title>
+<meta name="description" content="Everything you've liked at Utsav Showroom, in one place." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/sections.css">
+<link rel="stylesheet" href="css/enhance.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap nav-row">
+    <a href="index.html" class="wordmark">Utsav <em>Showroom</em></a>
+    <div class="nav-links">
+      <a href="collections.html">Collections</a>
+      <a href="spotlight.html">Spotlight</a>
+      <a href="studio.html">Parlour</a>
+      <a href="classes.html">Classes</a>
+      <a href="pages/garba-dresses.html">Garba Dresses</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="nav-right">
+      <div class="toggle" id="themeToggle">
+        <span id="toggleLabel">Day</span>
+        <span class="toggle-track"><span class="toggle-thumb"></span></span>
+      </div>
+      <a href="contact.html" class="nav-cta">Book a Slot</a>
+    </div>
+  </div>
+</nav>
+
+<section class="page-hero">
+  <div class="wrap">
+    <p class="crumb"><a href="index.html">Home</a> / Favorites</p>
+    <h1>Your <i>Favorites.</i></h1>
+    <p>Everything you've liked, in one place — tap the ♥ on any card to remove it.</p>
+  </div>
+</section>
+
+<section class="page-body">
+  <div class="wrap">
+    <div class="grid card-max reveal" id="favGrid"></div>
+    <p id="favEmptyNote" style="display:none; text-align:center; color:var(--text-soft); padding:60px 20px; font-size:14px;">
+      Nothing liked yet — tap the ♡ on any item across the site and it'll show up here.
+    </p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <h3>UTSAV SHOWROOM</h3>
+        <p>A curated world of wedding style, beauty and celebration.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Parlour</h4>
+        <a href="pages/hair-styling.html">Hair</a>
+        <a href="pages/makeup-looks.html">Makeup</a>
+        <a href="pages/nail-art.html">Nail Art</a>
+        <a href="pages/face-care.html">Skin &amp; Face</a>
+      </div>
+      <div class="foot-col">
+        <h4>Site</h4>
+        <a href="collections.html">Collections</a>
+        <a href="spotlight.html">Spotlight</a>
+        <a href="classes.html">Classes</a>
+      </div>
+      <div class="foot-col">
+        <h4>Contact</h4>
+        <button type="button" class="footer-link-btn" data-book="Wedding Rental">Book a Slot</button>
+        <a href="tel:+919575929021">Call Us</a>
+        <a href="contact.html">Find the Showroom</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Utsav Showroom. All looks archived in-house.</span>
+      <span>Favorites are saved on this device.</span>
+    </div>
+  </div>
+</footer>
+
+<div class="modal-overlay" id="detailModal">
+  <div class="modal-box">
+    <button type="button" class="modal-close" aria-label="Close">✕</button>
+    <div class="modal-photo"><img src="" alt=""></div>
+    <div class="modal-info">
+      <p class="eyebrow modal-eyebrow"></p>
+      <h2 class="modal-name"></h2>
+      <div class="modal-rating"></div>
+      <div class="modal-price"></div>
+      <p class="modal-desc"></p>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-solid modal-cta"></button>
+        <button type="button" class="modal-like" aria-label="Like">♡</button>
+        <button type="button" class="modal-share" aria-label="Share">⤴</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script src="js/sidebar.js"></script>
+<script src="js/booking.js"></script>
+<script src="js/api-config.js"></script>
+<script src="js/api-integration.js"></script>
+<script>
+(function () {
+  // Maps each asset folder to the same category slug used in
+  // js/app.js's CATEGORY_META, so a liked item (stored as just an
+  // image path) renders with the correct name/price/type here.
+  const FOLDER_TO_CATEGORY = {
+    BRIDAL_WEAR: 'bridal-wear', GROOM_WEAR: 'groom-wear', GROOM_JEWELLERY: 'groom-jewellery',
+    PAGDI_SAFA: 'pagdi-safa', BRIDAL_JEWELLERY: 'bridal-jewellery', HAIR_STYLING: 'hair-styling',
+    COUPLE_SETS: 'couple-sets', JUTI_FOOTWEAR: 'juti-footwear', NAIL_ART: 'nail-art',
+    MAKEUP_LOOKS: 'makeup-looks', FEATURES_WALLPAPERS: 'features', NAIL_CARE: 'nail-care',
+    FACE_CARE: 'face-care', STUDIO_DETAILS: 'studio-details',
+  };
+  function categoryFromPath(path) {
+    const m = path.match(/assets\/([A-Z_]+)\//);
+    return (m && FOLDER_TO_CATEGORY[m[1]]) || '';
+  }
+
+  const grid = document.getElementById('favGrid');
+  const emptyNote = document.getElementById('favEmptyNote');
+
+  function cardTemplate(imagePath, category) {
+    const name = imagePath.split('/').pop().replace(/\.[a-z]+$/i, '');
+    return `
+      <div class="card card-full" data-image="${imagePath}" data-category="${category}">
+        <div class="card-photo"><img loading="lazy" src="${imagePath}" alt="${name}"></div>
+        <div class="card-body">
+          <h3 class="card-name"></h3>
+          <div class="card-meta"><span class="card-rating"><span class="card-rating-val"></span> <span class="card-reviews-val"></span></span></div>
+          <div class="card-price"><span class="card-price-val"></span><small class="card-price-unit"></small></div>
+          <div class="card-actions"><button type="button" class="btn btn-line btn-visit">Visit</button><button type="button" class="btn btn-solid card-cta"></button></div>
+        </div>
+      </div>`;
+  }
+
+  function render() {
+    let likes = [];
+    try { likes = JSON.parse(localStorage.getItem('utsav-likes') || '[]'); } catch (e) {}
+
+    if (!likes.length) {
+      grid.innerHTML = '';
+      emptyNote.style.display = 'block';
+      return;
+    }
+    emptyNote.style.display = 'none';
+    grid.innerHTML = likes.map((path) => cardTemplate(path, categoryFromPath(path))).join('');
+    grid.querySelectorAll('.card[data-image]').forEach((card) => {
+      if (typeof window.MU_hydrateCard === 'function') window.MU_hydrateCard(card);
+    });
+  }
+
+  render();
+  // Re-render the instant a like is toggled anywhere (including the ♥
+  // icon on these very cards) — this is what makes un-hearting a card
+  // here remove it from the grid immediately.
+  document.addEventListener('utsav-likes-updated', render);
+})();
+</script>
+</body>
+</html>

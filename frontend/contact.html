@@ -1,0 +1,146 @@
+<!doctype html>
+<!-- =========================================================================
+     UTSAV SHOWROOM — CONTACT PAGE  (contact.html)
+     =========================================================================
+     WHAT THIS PAGE IS
+     Where every "Book a Slot" / "Enquire" button across the site ends
+     up. Studio info (address, hours, phone — placeholder text, swap
+     in real details) on the left, a static enquiry form on the right.
+
+     NOTE: the form has no backend wired up (this is a front-end
+     prototype) — submitting currently just shows a friendly on-page
+     confirmation via a few lines of inline JS at the bottom. Wire it
+     to a real endpoint (email service, Google Sheet, CRM, etc.) when
+     ready to go live — see js/app.js comments for where site-wide JS
+     lives if you want to move this logic there later.
+     ========================================================================= -->
+<html lang="en" data-theme="day">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Contact — Utsav Showroom</title>
+<meta name="description" content="Book a fitting, a studio appointment, or a class at Utsav Showroom." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/sections.css">
+<link rel="stylesheet" href="css/enhance.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap nav-row">
+    <a href="index.html" class="wordmark">Utsav <em>Showroom</em></a>
+    <div class="nav-links">
+      <a href="collections.html">Collections</a>
+      <a href="spotlight.html">Spotlight</a>
+      <a href="studio.html">Parlour</a>
+      <a href="classes.html">Classes</a>
+      <a href="pages/garba-dresses.html">Garba Dresses</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="nav-right">
+      <div class="toggle" id="themeToggle">
+        <span id="toggleLabel">Day</span>
+        <span class="toggle-track"><span class="toggle-thumb"></span></span>
+      </div>
+      <a href="contact.html" class="nav-cta">Book a Slot</a>
+    </div>
+  </div>
+</nav>
+
+<section class="page-hero">
+  <div class="wrap">
+    <p class="crumb"><a href="index.html">Home</a> / Contact</p>
+    <h1>Let's get you <i>booked.</i></h1>
+    <p>Choose what you're booking, then reserve your slot in a quick, dedicated window.</p>
+  </div>
+</section>
+
+<section class="page-body">
+  <div class="wrap">
+
+    <div class="contact-tri reveal">
+      <div class="contact-tri-card" data-book="Wedding Rental">
+        <h3>Wedding Rental</h3>
+        <p>Bridal &amp; Groom Wear, Jewellery, Pagdi &amp; Safa, Juti, Couple Sets — fittings by appointment.</p>
+        <span class="btn btn-line">Book a Slot →</span>
+      </div>
+      <div class="contact-tri-card" data-book="Beauty Parlour">
+        <h3>Beauty Parlour</h3>
+        <p>Makeup, Hair Styling, Nail Art &amp; Care, Face Care — in-studio appointments with our resident artists.</p>
+        <span class="btn btn-line">Book a Slot →</span>
+      </div>
+      <div class="contact-tri-card" data-book="Beauty Classes">
+        <h3>Beauty Classes</h3>
+        <p>Learn makeup, hair, and nail artistry from our in-house team — beginner to professional courses.</p>
+        <span class="btn btn-line">Book a Slot →</span>
+      </div>
+    </div>
+
+    <div class="wrap contact-grid" style="padding:0;">
+    <div class="contact-info reveal">
+      <div class="contact-row">
+        <h4>Showroom Address</h4>
+        <p>Utsav Showroom, Shop 12, Celebration Plaza,<br>Main Market Road, Bhātāpāra, Chhattisgarh</p>
+      </div>
+      <div class="contact-row">
+        <h4>Phone &amp; WhatsApp</h4>
+        <p>+91 95759 29021</p>
+      </div>
+      <div class="contact-row">
+        <h4>Showroom Hours</h4>
+        <p>Tuesday – Sunday, 10:00 AM – 8:00 PM<br>Closed Mondays</p>
+      </div>
+      <div class="contact-row">
+        <h4>What We Book</h4>
+        <p>Wardrobe fittings, parlour appointments, and beauty class seats — pick a section above for a quick booking window.</p>
+      </div>
+    </div>
+  </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <h3>UTSAV SHOWROOM</h3>
+        <p>A curated world of wedding style, beauty and celebration.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Parlour</h4>
+        <a href="pages/hair-styling.html">Hair</a>
+        <a href="pages/makeup-looks.html">Makeup</a>
+        <a href="pages/nail-art.html">Nail Art</a>
+        <a href="pages/face-care.html">Skin &amp; Face</a>
+      </div>
+      <div class="foot-col">
+        <h4>Site</h4>
+        <a href="collections.html">Collections</a>
+        <a href="spotlight.html">Spotlight</a>
+        <a href="classes.html">Classes</a>
+      </div>
+      <div class="foot-col">
+        <h4>Contact</h4>
+        <button type="button" class="footer-link-btn" data-book="Wedding Rental">Book a Slot</button>
+        <a href="tel:+919575929021">Call Us</a>
+        <a href="contact.html">Find the Showroom</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Utsav Showroom. All looks archived in-house.</span>
+      <span>Contact — enquiry form is front-end only, not yet wired to a backend.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/app.js"></script>
+<script src="js/sidebar.js"></script>
+<script src="js/booking.js"></script>
+<script src="js/api-config.js"></script>
+<script src="js/api-integration.js"></script>
+</body>
+</html>

@@ -1,0 +1,323 @@
+/* =====================================================================
+   UTSAV SHOWROOM — BASE.CSS
+   =====================================================================
+   WHAT THIS FILE IS FOR
+   This is the shared stylesheet loaded by EVERY page in the site
+   (the homepage in /index.html, and all 14 category pages in /pages/).
+   It holds everything that must look and behave the same everywhere:
+
+     1. THEME TOKENS      — the Day / Night colour system (CSS variables)
+     2. RESET & TYPE       — basic reset + heading/body font rules
+     3. LAYOUT UTILITIES    — .wrap (max-width container), .reveal (scroll-in)
+     4. NAV BAR             — the sticky top bar + Day/Night toggle switch
+     5. BUTTONS              — .btn-solid / .btn-line / .btn-ivory
+     6. PRODUCT/SERVICE CARD — the reusable image "box" used on every
+                                 category page (this is the piece the
+                                 client asked to have 3 fixed sizes for:
+                                 card-min / card-mid / card-max)
+     7. FULL-SCREEN DETAIL MODAL — opens when a card is clicked
+     8. FOOTER
+
+   Page-specific styling (the homepage's photo collage, bento grid,
+   spotlight rows, etc.) lives separately in /css/home.css so this file
+   stays reusable and doesn't get cluttered with one-off homepage rules.
+   ===================================================================== */
+
+
+/* ---------------------------------------------------------------------
+   1. THEME TOKENS
+   -----------------------------------------------------------------
+   Every colour in the site is a CSS variable, switched by the
+   `data-theme="day"` / `data-theme="night"` attribute on <html>.
+   app.js flips that attribute when the toggle switch is clicked.
+   Nothing below needs to change if you add a new page — just use
+   var(--text), var(--pink-dark) etc. and both themes work for free.
+--------------------------------------------------------------------- */
+:root{
+  --max: 1280px;      /* page content max-width */
+  --r-sm: 4px;
+  --r-md: 10px;
+  --gold: #D4AF37;     /* gold accent, same in both themes */
+}
+
+/* DAY THEME — baby pink / lavender / dark pink / purple (as requested) */
+html[data-theme="day"]{
+  --bg: #FCF3F7;
+  --bg-grad: linear-gradient(160deg, #FBE9F1 0%, #F3E6F8 45%, #ECE3F7 100%);
+  --surface: #FFFFFF;
+  --surface-soft: #FBF0F5;
+  --text: #34172E;
+  --text-soft: #7C5A72;
+  --pink-baby: #F7CFE0;
+  --pink-dark: #C21E6D;
+  --lavender: #C6AEEA;
+  --purple: #6C3AA8;
+  --line: rgba(52,23,46,0.12);
+  --nav-bg: rgba(252,243,247,0.78);
+}
+
+/* NIGHT THEME — black / maroon / gold (as requested) */
+html[data-theme="night"]{
+  --bg: #0C0709;
+  --bg-grad: linear-gradient(160deg, #150409 0%, #1C0810 45%, #100608 100%);
+  --surface: #170A0F;
+  --surface-soft: #1E0D14;
+  --text: #F4E7DD;
+  --text-soft: #C6A2A9;
+  --pink-baby: #6B0F2B;
+  --pink-dark: #8C1C3B;
+  --lavender: #4A1420;
+  --purple: #3A0F16;
+  --line: rgba(244,231,221,0.14);
+  --nav-bg: rgba(12,7,9,0.78);
+}
+
+
+/* ---------------------------------------------------------------------
+   2. RESET & TYPE
+--------------------------------------------------------------------- */
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Manrope', sans-serif;   /* body/UI font */
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+  transition:background .5s ease, color .5s ease; /* smooth Day/Night flip */
+}
+h1,h2,h3{ font-family:'Bodoni Moda', serif; margin:0; letter-spacing:-0.01em; } /* display font */
+a{color:inherit; text-decoration:none;}
+img{display:block; max-width:100%;}
+.mono{font-family:'IBM Plex Mono', monospace;}
+
+/* small caps label used above section titles, e.g. "THE COLLECTIONS" */
+.eyebrow{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:10.5px; letter-spacing:0.22em; text-transform:uppercase;
+  color:var(--gold);
+  display:flex; align-items:center; gap:10px;
+}
+html[data-theme="day"] .eyebrow{color:var(--pink-dark);}
+.eyebrow::before{content:'';width:22px;height:1px;background:currentColor;display:inline-block;}
+
+
+/* ---------------------------------------------------------------------
+   3. LAYOUT UTILITIES
+--------------------------------------------------------------------- */
+/* .wrap = the centred max-width container used on every section */
+.wrap{max-width:var(--max); margin:0 auto; padding:0 30px;}
+@media(max-width:720px){ .wrap{padding:0 20px;} }
+
+/* .reveal = elements fade/slide in the first time they scroll into
+   view. app.js adds the "in" class via IntersectionObserver. */
+.reveal{opacity:0; transform:translateY(24px); transition:opacity .8s ease, transform .8s ease;}
+.reveal.in{opacity:1; transform:none;}
+
+
+/* ---------------------------------------------------------------------
+   4. NAV BAR (shared header, identical markup on every page)
+--------------------------------------------------------------------- */
+.nav{position:sticky; top:0; z-index:50; background:var(--nav-bg); backdrop-filter:blur(12px); border-bottom:1px solid var(--line); transition:background .5s ease, border-color .5s ease;}
+.nav-row{display:flex; align-items:center; justify-content:space-between; height:78px;}
+.wordmark{font-family:'Bodoni Moda', serif; font-weight:600; font-size:20px;}
+.wordmark em{font-style:italic; font-weight:400; background:linear-gradient(90deg, var(--pink-dark), var(--purple)); -webkit-background-clip:text; background-clip:text; color:transparent;}
+html[data-theme="night"] .wordmark em{ background:linear-gradient(90deg, var(--gold), #C6446B); -webkit-background-clip:text; background-clip:text; }
+.nav-links{display:flex; gap:30px; font-size:13px;}
+.nav-links a{position:relative; padding:4px 0; color:var(--text-soft);}
+.nav-links a:hover{color:var(--text);}
+.nav-right{display:flex; align-items:center; gap:18px;}
+
+/* Day/Night toggle switch — a small pill with a sliding dot */
+.toggle{display:flex; align-items:center; gap:8px; cursor:pointer; font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-soft); user-select:none;}
+.toggle-track{width:46px; height:24px; border-radius:20px; border:1px solid var(--line); background:var(--surface-soft); position:relative; transition:background .4s ease;}
+.toggle-thumb{position:absolute; top:2px; left:2px; width:18px; height:18px; border-radius:50%; background:linear-gradient(135deg, var(--pink-dark), var(--purple)); transition:transform .4s cubic-bezier(.6,.2,.2,1), background .4s ease;}
+html[data-theme="night"] .toggle-thumb{ transform:translateX(22px); background:linear-gradient(135deg, var(--gold), #8C1C3B); }
+
+.nav-cta{font-family:'IBM Plex Mono', monospace; font-size:10.5px; letter-spacing:0.06em; background:linear-gradient(90deg, var(--pink-dark), var(--purple)); color:#fff; padding:11px 20px; text-transform:uppercase; border-radius:2px; transition:filter .25s ease, transform .25s ease;}
+html[data-theme="night"] .nav-cta{ background:linear-gradient(90deg, var(--gold), #8C1C3B); color:#170A0F; }
+.nav-cta:hover{filter:brightness(1.1); transform:translateY(-1px);}
+@media(max-width:900px){ .nav-links{display:none;} }
+
+
+/* ---------------------------------------------------------------------
+   5. BUTTONS
+--------------------------------------------------------------------- */
+.btn{font-family:'IBM Plex Mono', monospace; font-size:11.5px; letter-spacing:0.05em; text-transform:uppercase; padding:14px 22px; display:inline-flex; align-items:center; gap:10px; border-radius:2px; transition:all .25s ease; cursor:pointer; border:none;}
+.btn-solid{background:linear-gradient(90deg, var(--pink-dark), var(--purple)); color:#fff;}
+html[data-theme="night"] .btn-solid{ background:linear-gradient(90deg, var(--gold), #8C1C3B); color:#170A0F; }
+.btn-solid:hover{filter:brightness(1.12); transform:translateY(-2px);}
+.btn-line{border:1px solid var(--text); color:var(--text); background:transparent;}
+.btn-line:hover{background:var(--text); color:var(--bg); transform:translateY(-2px);}
+.btn-ivory{background:#fff; color:var(--purple);}
+html[data-theme="night"] .btn-ivory{background:var(--gold); color:#170A0F;}
+.btn-ivory:hover{transform:translateY(-2px); filter:brightness(1.05);}
+.btn-block{width:100%; justify-content:center;}
+
+
+/* ---------------------------------------------------------------------
+   6. PRODUCT / SERVICE CARD  ("image box")
+   -----------------------------------------------------------------
+   This is the reusable box used for every single item across all 14
+   category pages (855 of them in total). Per the brief:
+
+     - card-min  = the exact size the client liked on the "Bridal
+                    Jewellery, in detail" homepage strip (220 x 290).
+                    This is the SMALLEST size any category is allowed
+                    to use.
+     - card-max  = the size used on the Hair Styling page (300 x 400).
+                    This is the LARGEST size any category is allowed
+                    to use.
+     - card-mid  = an in-between size (258 x 336) for categories that
+                    are neither the smallest nor the flagship largest.
+
+   Each category page picks ONE of these three classes for its whole
+   grid (see /pages/*.html — the class is set once on the <div class="grid">).
+
+   Every card shows: photo, stylish serif name, star rating, price,
+   and a call-to-action button whose LABEL changes automatically based
+   on whether the item is a rental product ("Rent Now") or a beauty
+   service ("Book Appointment") — driven by the data-type attribute.
+--------------------------------------------------------------------- */
+.grid{display:grid; gap:20px; grid-template-columns:repeat(auto-fill, minmax(var(--card-w), 1fr));}
+
+.card{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--r-md);
+  overflow:hidden;
+  cursor:pointer;
+  display:flex; flex-direction:column;
+  transition:transform .3s ease, box-shadow .3s ease;
+}
+.card:hover{transform:translateY(-4px); box-shadow:0 18px 34px rgba(52,23,46,0.16);}
+html[data-theme="night"] .card:hover{box-shadow:0 18px 40px rgba(0,0,0,0.55);}
+
+.card-photo{width:100%; overflow:hidden; background:var(--surface-soft); position:relative;}
+.card-photo img{width:100%; height:100%; object-fit:cover; transition:transform .6s ease;}
+.card:hover .card-photo img{transform:scale(1.07);}
+
+/* like + share icon buttons, floated top-right of every photo */
+.card-icon-row{position:absolute; top:10px; right:10px; display:flex; gap:8px; z-index:2;}
+.icon-btn{
+  width:32px; height:32px; border-radius:50%; border:none; cursor:pointer;
+  background:rgba(20,7,15,0.45); backdrop-filter:blur(4px);
+  display:flex; align-items:center; justify-content:center;
+  color:#fff; font-size:15px; transition:transform .2s ease, background .2s ease;
+}
+.icon-btn:hover{transform:scale(1.1); background:rgba(20,7,15,0.65);}
+.icon-btn.liked{color:var(--pink-dark); background:#fff;}
+html[data-theme="night"] .icon-btn.liked{color:var(--gold);}
+
+/* small rating+price badge shown on COMPACT cards (bento tiles, spotlight
+   cards) that don't have room for a full .card-body */
+.card-badge-row{position:absolute; left:10px; right:10px; bottom:10px; z-index:2; display:flex; justify-content:space-between; align-items:flex-end; pointer-events:none;}
+.card-badge-row .b-rating{font-family:'IBM Plex Mono', monospace; font-size:10px; color:var(--gold); background:rgba(20,7,15,0.55); padding:3px 7px; border-radius:10px;}
+.card-badge-row .b-price{font-family:'Manrope', sans-serif; font-weight:700; font-size:12px; color:#fff; background:rgba(20,7,15,0.55); padding:3px 8px; border-radius:10px;}
+
+/* toast shown briefly after "share" copies a link */
+.share-toast{
+  position:fixed; left:50%; bottom:28px; transform:translateX(-50%) translateY(20px);
+  background:var(--text); color:var(--bg); font-family:'IBM Plex Mono', monospace; font-size:12px;
+  padding:12px 20px; border-radius:30px; z-index:400; opacity:0; pointer-events:none;
+  transition:opacity .3s ease, transform .3s ease;
+}
+.share-toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+
+/* the three fixed heights that satisfy "min = jewellery box,
+   max = hair styling box" */
+.card-min  .card-photo{ height:290px; }   /* min box height  */
+.card-mid  .card-photo{ height:336px; }   /* mid box height  */
+.card-max  .card-photo{ height:400px; }   /* max box height  */
+.card-min{ --card-w:220px; }
+.card-mid{ --card-w:258px; }
+.card-max{ --card-w:300px; }
+
+.card-body{padding:16px 16px 18px; display:flex; flex-direction:column; gap:8px; flex:1;}
+.card-name{font-family:'Bodoni Moda', serif; font-weight:600; font-style:italic; font-size:16.5px; line-height:1.25;} /* "stylish letters" */
+.card-meta{display:flex; align-items:center; justify-content:space-between; font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--text-soft);}
+.card-rating{display:flex; align-items:center; gap:4px; color:var(--gold);}
+.card-price{font-family:'Manrope', sans-serif; font-weight:700; font-size:15px; color:var(--text); margin-top:2px;}
+.card-price small{font-weight:500; font-size:11px; color:var(--text-soft); text-transform:uppercase; margin-left:4px;}
+.card-cta{margin-top:10px; font-size:10.5px; padding:11px 14px;}
+
+
+/* ---------------------------------------------------------------------
+   7. FULL-SCREEN DETAIL MODAL
+   -----------------------------------------------------------------
+   Clicking ANY .card (on any page) opens this overlay full-screen,
+   showing a bigger photo + the same name/price/rating/CTA. The markup
+   for #detailModal lives once per page (copy/pasted at the bottom,
+   right before </body>) and app.js fills in its content from the
+   data-* attributes of whichever card was clicked.
+--------------------------------------------------------------------- */
+.modal-overlay{
+  position:fixed; inset:0; z-index:200;
+  background:rgba(12,7,9,0.72);
+  backdrop-filter:blur(6px);
+  display:none; /* toggled to flex by app.js */
+  align-items:center; justify-content:center;
+  padding:24px;
+}
+.modal-overlay.open{display:flex;}
+.modal-box{
+  background:var(--surface);
+  max-width:920px; width:100%; max-height:90vh;
+  border-radius:var(--r-md);
+  overflow:auto;
+  display:grid; grid-template-columns:1.1fr 1fr;
+  position:relative;
+}
+.modal-photo{background:var(--surface-soft); min-height:320px;}
+.modal-photo img{width:100%; height:100%; object-fit:cover;}
+.modal-info{padding:40px 36px; display:flex; flex-direction:column; gap:16px;}
+.modal-info .eyebrow{font-size:10px;}
+.modal-info h2{font-style:italic; font-weight:600; font-size:clamp(24px,2.6vw,34px);}
+.modal-rating{display:flex; align-items:center; gap:6px; color:var(--gold); font-family:'IBM Plex Mono', monospace; font-size:13px;}
+.modal-price{font-size:26px; font-weight:800;}
+.modal-price small{font-size:12px; font-weight:500; color:var(--text-soft); text-transform:uppercase; margin-left:6px;}
+.modal-desc{font-size:14px; line-height:1.7; color:var(--text-soft);}
+.modal-actions{display:flex; gap:10px; margin-top:6px;}
+.modal-cta{flex:1;}
+.modal-like, .modal-share{
+  width:48px; height:48px; border-radius:2px; border:1px solid var(--line); background:var(--surface-soft);
+  display:flex; align-items:center; justify-content:center; font-size:18px; cursor:pointer; color:var(--text);
+  transition:all .2s ease;
+}
+.modal-like.liked{color:var(--pink-dark); border-color:var(--pink-dark);}
+html[data-theme="night"] .modal-like.liked{color:var(--gold); border-color:var(--gold);}
+.modal-close{position:absolute; top:16px; right:16px; width:38px; height:38px; border-radius:50%; background:var(--surface-soft); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; font-size:18px; cursor:pointer; z-index:2;}
+@media(max-width:760px){ .modal-box{grid-template-columns:1fr;} .modal-photo{min-height:260px;} }
+
+
+/* ---------------------------------------------------------------------
+   8. FOOTER (shared, identical on every page)
+--------------------------------------------------------------------- */
+footer{background:var(--surface); border-top:1px solid var(--line); padding:70px 0 28px; margin-top:40px;}
+.foot-top{display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:36px; padding-bottom:50px; border-bottom:1px solid var(--line);}
+.foot-brand h3{font-size:24px; margin-bottom:12px;}
+.foot-brand p{font-size:13px; line-height:1.7; max-width:32ch; color:var(--text-soft);}
+.foot-col h4{font-family:'IBM Plex Mono', monospace; font-size:10.5px; letter-spacing:0.1em; text-transform:uppercase; color:var(--pink-dark); margin-bottom:14px;}
+html[data-theme="night"] .foot-col h4{color:var(--gold);}
+.foot-col a{display:block; font-size:13px; margin-bottom:9px; color:var(--text-soft);}
+.foot-col a:hover{color:var(--text);}
+.foot-col .footer-link-btn{display:block; font-size:13px; margin-bottom:9px; color:var(--text-soft); background:none; border:none; padding:0; font-family:inherit; cursor:pointer; text-align:left;}
+.foot-col .footer-link-btn:hover{color:var(--text);}
+.foot-bottom{display:flex; justify-content:space-between; padding-top:22px; font-size:11.5px; color:var(--text-soft); flex-wrap:wrap; gap:10px;}
+@media(max-width:760px){ .foot-top{grid-template-columns:1fr 1fr; row-gap:32px;} }
+
+
+/* ---------------------------------------------------------------------
+   PAGE HEADER (used at the top of each of the 14 category pages)
+--------------------------------------------------------------------- */
+.page-hero{padding:60px 0 50px; background:var(--bg-grad); border-bottom:1px solid var(--line);}
+.page-hero .crumb{font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--text-soft); margin-bottom:16px;}
+.page-hero .crumb a:hover{color:var(--text);}
+.page-hero h1{font-size:clamp(34px,4.4vw,58px); font-weight:600;}
+.page-hero h1 i{font-style:italic; background:linear-gradient(90deg, var(--pink-dark), var(--purple)); -webkit-background-clip:text; background-clip:text; color:transparent;}
+html[data-theme="night"] .page-hero h1 i{ background:linear-gradient(90deg, var(--gold), #C6446B); -webkit-background-clip:text; background-clip:text; }
+.page-hero p{max-width:56ch; color:var(--text-soft); font-size:14.5px; line-height:1.7; margin-top:16px;}
+.page-hero .tags{display:flex; gap:10px; margin-top:22px; flex-wrap:wrap;}
+.page-hero .tag{font-family:'IBM Plex Mono', monospace; font-size:10.5px; letter-spacing:0.05em; text-transform:uppercase; padding:8px 14px; border:1px solid var(--line); border-radius:20px; color:var(--text-soft);}
+.page-body{padding:60px 0 100px;}

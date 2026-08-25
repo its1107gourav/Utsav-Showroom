@@ -1,0 +1,26 @@
+# Render Blueprint — https://render.com/docs/blueprint-spec
+# Import this repo on Render and it will provision the web service below.
+# You still need to add a PostgreSQL database (Render Postgres, Supabase, etc.)
+# and paste its connection string into DATABASE_URL, plus your Cloudinary keys.
+services:
+  - type: web
+    name: utsav-showroom-backend
+    runtime: node
+    plan: free
+    buildCommand: npm install && npx prisma generate && npx prisma migrate deploy
+    startCommand: npm start
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: CORS_ORIGINS
+        sync: false
+      - key: NODE_ENV
+        value: production

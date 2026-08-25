@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard — Utsav Showroom Admin</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+<div class="mu-shell">
+  <aside class="mu-sidebar">
+    <h1>Utsav Showroom<br>Admin</h1>
+    <nav>
+      <a href="dashboard.html" class="active">Dashboard</a>
+      <a href="posts.html">Posts / Products</a>
+      <a href="inventory.html">Inventory</a>
+      <a href="categories.html">Categories</a>
+      <a href="admins.html">Manage Owners</a>
+    </nav>
+    <div class="mu-logout"><button class="btn" id="logoutBtn" style="width:100%">Log out</button></div>
+  </aside>
+  <main class="mu-main">
+    <div class="mu-topbar">
+      <h2>Dashboard</h2>
+      <div class="mu-whoami">Signed in as <span id="adminWhoAmI">…</span></div>
+    </div>
+
+    <div class="mu-stats" id="statGrid">
+      <div class="mu-stat"><div class="n">…</div><div class="l">Total posts</div></div>
+    </div>
+
+    <div class="mu-card">
+      <h3>Low stock alerts</h3>
+      <div id="lowStockList">Loading…</div>
+    </div>
+
+    <div class="mu-card">
+      <h3>Quick actions</h3>
+      <a class="btn btn-primary" href="post-edit.html">+ Create New Post</a>
+      <a class="btn" href="posts.html">Manage Posts</a>
+      <a class="btn" href="inventory.html">Manage Inventory</a>
+    </div>
+  </main>
+</div>
+<script src="js/admin-api.js"></script>
+<script>
+(async function () {
+  await requireAdminSession();
+
+  document.getElementById('logoutBtn').addEventListener('click', async () => {
+    await api('/api/auth/logout', { method: 'POST' });
+    window.location.href = 'index.html';
+  });
+
+  try {
+    const { posts } = await api('/api/posts?all=1');
+    const published = posts.filter(p => p.status === 'PUBLISHED').length;
+    const draft = posts.filter(p => p.status === 'DRAFT').length;
+    const archived = posts.filter(p => p.status === 'ARCHIVED').length;
+
+    const { totalItems, totalUnits, reservedUnits, lowStockCount } = await api('/api/inventory/summary');
+
+    document.getElementById('statGrid').innerHTML = `
+      <div class="mu-stat"><div class="n">${posts.length}</div><div class="l">Total posts</div></div>
+      <div class="mu-stat"><div class="n">${published}</div><div class="l">Published</div></div>
+      <div class="mu-stat"><div class="n">${draft}</div><div class="l">Draft</div></div>
+      <div class="mu-stat"><div class="n">${archived}</div><div class="l">Archived</div></div>
+      <div class="mu-stat"><div class="n">${totalUnits}</div><div class="l">Inventory units</div></div>
+      <div class="mu-stat"><div class="n">${reservedUnits}</div><div class="l">Reserved / rented</div></div>
+      <div class="mu-stat ${lowStockCount ? 'warn' : ''}"><div class="n">${lowStockCount}</div><div class="l">Low stock items</div></div>
+    `;
+
+    const { inventory } = await api('/api/inventory?lowStock=1');
+    const listEl = document.getElementById('lowStockList');
+    if (!inventory.length) {
+      listEl.innerHTML = '<div class="mu-empty">Nothing low on stock right now.</div>';
+    } else {
+      listEl.innerHTML = `<table class="mu-table"><thead><tr><th>Product</th><th>Available</th><th>Threshold</th><th></th></tr></thead><tbody>
+        ${inventory.map(i => `<tr>
+          <td>${i.post ? i.post.title : '(untitled)'}</td>
+          <td><span class="mu-badge low">${i.availableUnits} left</span></td>
+          <td>${i.lowStockThreshold}</td>
+          <td><a href="inventory.html">Manage</a></td>
+        </tr>`).join('')}
+      </tbody></table>`;
+    }
+  } catch (e) {
+    toast(e.message, true);
+  }
+})();
+</script>
+</body>
+</html>

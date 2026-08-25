@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Inventory — Utsav Showroom Admin</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+<div class="mu-shell">
+  <aside class="mu-sidebar">
+    <h1>Utsav Showroom<br>Admin</h1>
+    <nav>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="posts.html">Posts / Products</a>
+      <a href="inventory.html" class="active">Inventory</a>
+      <a href="categories.html">Categories</a>
+      <a href="admins.html">Manage Owners</a>
+    </nav>
+    <div class="mu-logout"><button class="btn" id="logoutBtn" style="width:100%">Log out</button></div>
+  </aside>
+  <main class="mu-main">
+    <div class="mu-topbar">
+      <h2>Inventory</h2>
+    </div>
+    <p class="hint">Owner-only stock tracking. Nothing on this page is ever shown to website visitors.</p>
+
+    <div class="mu-filters">
+      <label style="font-size:13px"><input type="checkbox" id="lowStockOnly" style="width:auto"> Low stock only</label>
+      <input type="text" id="searchBox" placeholder="Search product…">
+      <button class="btn" id="addStockBtn" type="button">+ Add stock record for a product</button>
+    </div>
+
+    <div class="mu-card" style="padding:0;">
+      <table class="mu-table">
+        <thead><tr>
+          <th>Product</th><th>SKU</th><th>Total</th><th>Reserved</th><th>Damaged</th><th>Available</th><th>Location</th><th></th>
+        </tr></thead>
+        <tbody id="invBody"><tr><td colspan="8" class="mu-empty">Loading…</td></tr></tbody>
+      </table>
+    </div>
+
+    <!-- Add/edit modal-ish panel -->
+    <div class="mu-card" id="editPanel" style="display:none;">
+      <h3 id="editPanelTitle">Edit stock</h3>
+      <input type="hidden" id="inv_postId">
+      <div class="mu-form-row" id="postPickerRow">
+        <label>Product</label>
+        <select id="inv_postPicker"></select>
+      </div>
+      <div class="mu-form-grid">
+        <div class="mu-form-row"><label>SKU</label><input type="text" id="inv_sku"></div>
+        <div class="mu-form-row"><label>Location</label><input type="text" id="inv_location" placeholder="Warehouse rack, shelf, etc."></div>
+        <div class="mu-form-row"><label>Total units owned</label><input type="number" id="inv_total" min="0"></div>
+        <div class="mu-form-row"><label>Reserved / rented out</label><input type="number" id="inv_reserved" min="0"></div>
+        <div class="mu-form-row"><label>Damaged / in repair</label><input type="number" id="inv_damaged" min="0"></div>
+        <div class="mu-form-row"><label>Low stock threshold</label><input type="number" id="inv_threshold" min="0"></div>
+        <div class="mu-form-row"><label>Cost price (₹, owner-only)</label><input type="number" id="inv_cost"></div>
+      </div>
+      <div class="mu-form-row"><label>Notes</label><textarea id="inv_notes"></textarea></div>
+      <button class="btn btn-primary" id="saveInvBtn" type="button">Save</button>
+      <button class="btn" id="cancelInvBtn" type="button">Cancel</button>
+    </div>
+  </main>
+</div>
+<script src="js/admin-api.js"></script>
+<script>
+let ALL_INV = [];
+let ALL_POSTS = [];
+
+function render() {
+  const lowOnly = document.getElementById('lowStockOnly').checked;
+  const q = document.getElementById('searchBox').value.toLowerCase();
+  const rows = ALL_INV.filter(i =>
+    (!lowOnly || i.lowStock) &&
+    (!q || (i.post && i.post.title.toLowerCase().includes(q)))
+  );
+  const body = document.getElementById('invBody');
+  if (!rows.length) { body.innerHTML = '<tr><td colspan="8" class="mu-empty">No inventory records match.</td></tr>'; return; }
+  body.innerHTML = rows.map(i => `
+    <tr>
+      <td>${i.post ? `<a href="post-edit.html?id=${i.post.id}">${i.post.title}</a>` : '(deleted post)'}</td>
+      <td>${i.sku || '—'}</td>
+      <td>
+        <span class="mu-inline">
+          <button class="btn btn-sm" data-adjust="totalUnits" data-delta="-1" data-post="${i.postId}">−</button>
+          ${i.totalUnits}
+          <button class="btn btn-sm" data-adjust="totalUnits" data-delta="1" data-post="${i.postId}">+</button>
+        </span>
+      </td>
+      <td>
+        <span class="mu-inline">
+          <button class="btn btn-sm" data-adjust="reservedUnits" data-delta="-1" data-post="${i.postId}">−</button>
+          ${i.reservedUnits}
+          <button class="btn btn-sm" data-adjust="reservedUnits" data-delta="1" data-post="${i.postId}">+</button>
+        </span>
+      </td>
+      <td>${i.damagedUnits}</td>
+      <td>${i.lowStock ? `<span class="mu-badge low">${i.availableUnits}</span>` : i.availableUnits}</td>
+      <td>${i.location || '—'}</td>
+      <td><button class="btn btn-sm" data-edit="${i.postId}">Edit</button></td>
+    </tr>
+  `).join('');
+}
+
+async function loadInventory() {
+  const { inventory } = await api('/api/inventory');
+  ALL_INV = inventory;
+  render();
+}
+
+document.getElementById('lowStockOnly').addEventListener('change', render);
+document.getElementById('searchBox').addEventListener('input', render);
+
+document.getElementById('invBody').addEventListener('click', async (e) => {
+  const adjBtn = e.target.closest('button[data-adjust]');
+  if (adjBtn) {
+    const { adjust, delta, post } = adjBtn.dataset;
+    try {
+      await api(`/api/inventory/${post}/adjust`, { method: 'PATCH', body: { field: adjust, delta: Number(delta) } });
+      await loadInventory();
+    } catch (err) { toast(err.message, true); }
+    return;
+  }
+  const editBtn = e.target.closest('button[data-edit]');
+  if (editBtn) openEditPanel(editBtn.dataset.edit);
+});
+
+function openEditPanel(postId, isNew = false) {
+  const panel = document.getElementById('editPanel');
+  panel.style.display = 'block';
+  document.getElementById('postPickerRow').style.display = isNew ? 'block' : 'none';
+  document.getElementById('inv_postId').value = postId || '';
+
+  const rec = ALL_INV.find(i => i.postId === postId);
+  document.getElementById('editPanelTitle').textContent = rec ? `Edit stock: ${rec.post ? rec.post.title : ''}` : 'Add stock record';
+  document.getElementById('inv_sku').value = rec ? (rec.sku || '') : '';
+  document.getElementById('inv_location').value = rec ? (rec.location || '') : '';
+  document.getElementById('inv_total').value = rec ? rec.totalUnits : 1;
+  document.getElementById('inv_reserved').value = rec ? rec.reservedUnits : 0;
+  document.getElementById('inv_damaged').value = rec ? rec.damagedUnits : 0;
+  document.getElementById('inv_threshold').value = rec ? rec.lowStockThreshold : 1;
+  document.getElementById('inv_cost').value = rec && rec.costPrice != null ? rec.costPrice : '';
+  document.getElementById('inv_notes').value = rec ? (rec.notes || '') : '';
+  panel.scrollIntoView({ behavior: 'smooth' });
+}
+
+document.getElementById('addStockBtn').addEventListener('click', async () => {
+  if (!ALL_POSTS.length) {
+    const { posts } = await api('/api/posts?all=1');
+    ALL_POSTS = posts;
+    const picker = document.getElementById('inv_postPicker');
+    picker.innerHTML = ALL_POSTS.map(p => `<option value="${p.id}">${p.title}</option>`).join('');
+  }
+  openEditPanel(document.getElementById('inv_postPicker').value, true);
+});
+
+document.getElementById('cancelInvBtn').addEventListener('click', () => {
+  document.getElementById('editPanel').style.display = 'none';
+});
+
+document.getElementById('saveInvBtn').addEventListener('click', async () => {
+  const isNew = document.getElementById('postPickerRow').style.display !== 'none';
+  const postId = isNew ? document.getElementById('inv_postPicker').value : document.getElementById('inv_postId').value;
+  const body = {
+    sku: document.getElementById('inv_sku').value || null,
+    location: document.getElementById('inv_location').value || null,
+    totalUnits: Number(document.getElementById('inv_total').value || 0),
+    reservedUnits: Number(document.getElementById('inv_reserved').value || 0),
+    damagedUnits: Number(document.getElementById('inv_damaged').value || 0),
+    lowStockThreshold: Number(document.getElementById('inv_threshold').value || 0),
+    costPrice: document.getElementById('inv_cost').value === '' ? null : Number(document.getElementById('inv_cost').value),
+    notes: document.getElementById('inv_notes').value || null,
+  };
+  try {
+    await api(`/api/inventory/${postId}`, { method: 'PUT', body });
+    toast('Inventory saved.');
+    document.getElementById('editPanel').style.display = 'none';
+    await loadInventory();
+  } catch (err) { toast(err.message, true); }
+});
+
+(async function () {
+  await requireAdminSession();
+  document.getElementById('logoutBtn').addEventListener('click', async () => {
+    await api('/api/auth/logout', { method: 'POST' });
+    window.location.href = 'index.html';
+  });
+  try { await loadInventory(); } catch (e) { toast(e.message, true); }
+})();
+</script>
+</body>
+</html>
